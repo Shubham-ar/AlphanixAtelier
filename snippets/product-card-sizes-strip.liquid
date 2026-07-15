@@ -1,0 +1,309 @@
+{% liquid
+  assign size_option = null
+  for option in product.options_with_values
+    assign downcased_name = option.name | downcase
+    if downcased_name == 'size' or downcased_name == 'sizes'
+      assign size_option = option
+      assign size_option_index = 'option' | append: forloop.index
+      break
+    endif
+  endfor
+%}
+
+{% if size_option != blank %}
+  <div class="product-card-sizes-strip">
+    {% for value in size_option.values %}
+      {% liquid
+        assign matching_variant = null
+        for variant in product.variants
+          assign matches_all = true
+          for i in (1..3)
+            assign opt_name = 'option' | append: i
+            if opt_name == size_option_index
+              if variant[opt_name] != value
+                assign matches_all = false
+              endif
+            else
+              if product.selected_or_first_available_variant[opt_name] != variant[opt_name] and variant[opt_name] != blank
+                assign matches_all = false
+              endif
+            endif
+          endfor
+          
+          if matches_all
+            assign matching_variant = variant
+            break
+          endif
+        endfor
+      %}
+
+      {% if matching_variant %}
+        {% assign form_id = 'QuickAddSizes-' | append: product.id | append: '-' | append: matching_variant.id %}
+        {% assign product_variant_media = matching_variant.featured_media.preview_image | image_url: width: 100 %}
+        {% if matching_variant.featured_media.preview_image == blank %}
+          {% assign product_variant_media = product.featured_media.preview_image | image_url: width: 100 %}
+        {% endif %}
+
+        <product-form-component
+          data-section-id="{{ section_id }}"
+          data-product-id="{{ product.id }}"
+          on:submit="/handleSubmit"
+          class="size-button-wrapper {% unless matching_variant.available %}size-button-wrapper--sold-out{% endunless %}"
+        >
+          <div
+            class="visually-hidden"
+            aria-live="assertive"
+            role="status"
+            aria-atomic="true"
+            ref="liveRegion"
+          ></div>
+          {%- form 'product', product, id: form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" ref="variantId" value="{{ matching_variant.id }}" {% unless matching_variant.available %}disabled{% endunless %}>
+            <input type="hidden" name="quantity" value="1">
+            
+            <add-to-cart-component
+              ref="addToCartButtonContainer"
+              data-product-variant-media="{{ product_variant_media }}"
+              data-add-to-cart-animation="{{ settings.add_to_cart_animation }}"
+            >
+              <button
+                type="submit"
+                name="add"
+                ref="addToCartButton"
+                on:click="/handleClick"
+                class="size-button add-to-cart-button"
+                {% unless matching_variant.available %}disabled{% endunless %}
+              >
+                <span class="add-to-cart-text size-button__text">
+                  <span class="size-button__label">{{ value }}</span>
+                </span>
+                <span class="add-to-cart__added">
+                  <span class="svg-wrapper add-to-cart__added-icon">
+                    {{- 'icon-checkmark-burst.svg' | inline_asset_content -}}
+                  </span>
+                </span>
+              </button>
+            </add-to-cart-component>
+          {%- endform -%}
+        </product-form-component>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% style %}
+  /* The size strip is absolutely positioned on the image (card-gallery) */
+  .card-gallery {
+    position: relative;
+  }
+  
+  .product-card-sizes-strip {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: stretch;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 8px;
+    gap: 4px;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100%);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  }
+
+  /* On desktop, hide the native Atelier quick-add pill when sizes strip is present */
+  @media screen and (min-width: 750px) {
+    .card-gallery:has(.product-card-sizes-strip) .quick-add {
+      display: none;
+    }
+  }
+
+  /* Reveal on hover (Desktop) */
+  @media screen and (min-width: 750px) {
+    product-card:hover .product-card-sizes-strip,
+    product-card:focus-within .product-card-sizes-strip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
+
+  /* Hide on mobile completely as requested (keep native pill) */
+  @media screen and (max-width: 749px) {
+    .product-card-sizes-strip {
+      display: none !important;
+    }
+  }
+
+  /* --- Size button wrapper --- */
+  .size-button-wrapper {
+    flex: 1;
+    display: flex;
+    min-width: 0;
+  }
+  
+  .size-button-wrapper form {
+    width: 100%;
+    margin: 0;
+    display: flex;
+  }
+
+  .size-button-wrapper add-to-cart-component {
+    width: 100%;
+    display: flex;
+  }
+
+  /* --- Size button (the actual <button>) --- */
+  .size-button.add-to-cart-button {
+    width: 100%;
+    padding: 8px 4px;
+    min-height: unset;
+    height: auto;
+    position: relative;
+    border-radius: 2px;
+    background-color: transparent;
+    color: #000;
+    border: 1px solid rgba(0,0,0,0.15);
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    overflow: hidden;
+    /* Override Atelier button transitions that cause cursor flicker */
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .size-button.add-to-cart-button:hover:not(:disabled) {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+    cursor: pointer;
+  }
+
+  .size-button.add-to-cart-button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .size-button-wrapper--sold-out .size-button__label {
+    text-decoration: line-through;
+  }
+
+  /* --- Text and checkmark inside the size button --- */
+  .size-button .add-to-cart-text.size-button__text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    /* Reset Atelier clip-path and filter that would hide text */
+    clip-path: none;
+    filter: none;
+    opacity: 1;
+    translate: none;
+  }
+
+  .size-button .size-button__label {
+    display: inline-block;
+    line-height: 1;
+  }
+
+  /* The checkmark overlay (absolutely centered) */
+  .size-button .add-to-cart__added {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .size-button .add-to-cart__added-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* --- Added state: hide label text, show checkmark --- */
+  .size-button.add-to-cart-button[data-added='true'] .add-to-cart-text.size-button__text {
+    clip-path: circle(0% at 50% 50%);
+    filter: blur(2px);
+    opacity: 0;
+    translate: 0 4px;
+  }
+
+  .size-button.add-to-cart-button[data-added='true'] .add-to-cart__added {
+    opacity: 1;
+  }
+
+  .size-button.add-to-cart-button[data-added='true'] .checkmark-burst {
+    opacity: 1;
+  }
+
+  .size-button.add-to-cart-button[data-added='true'] .check {
+    opacity: 1;
+    scale: 1;
+    filter: blur(0);
+  }
+
+  .size-button.add-to-cart-button[data-added='true'] .tick {
+    scale: 1.75;
+  }
+
+  .size-button.add-to-cart-button[data-added='true'] .ring {
+    opacity: 0;
+    scale: 1;
+  }
+
+  .size-button.add-to-cart-button[data-added='true'] .line {
+    stroke-dashoffset: 1.5;
+  }
+
+  /* Smooth transitions for the added state */
+  @media (prefers-reduced-motion: no-preference) {
+    .size-button.add-to-cart-button[data-added='true'] .check {
+      transition-property: opacity, scale, filter;
+      transition-duration: 0.26s;
+      transition-delay: 0.065s;
+      transition-timing-function: ease-out;
+    }
+
+    .size-button.add-to-cart-button[data-added='true'] .tick {
+      transition-property: scale;
+      transition-duration: 0.1s;
+      transition-delay: 0.15s;
+      transition-timing-function: ease-out;
+    }
+
+    .size-button.add-to-cart-button[data-added='true'] .ring {
+      transition-property: opacity, scale;
+      transition-duration: 0.2s;
+      transition-delay: 0.14s;
+      transition-timing-function: ease-out;
+    }
+
+    .size-button.add-to-cart-button[data-added='true'] .line {
+      transition-property: stroke-dashoffset;
+      transition-duration: 0.32s;
+      transition-delay: 0.14s;
+      transition-timing-function: ease-out;
+    }
+
+    .size-button .add-to-cart-text.size-button__text {
+      transition-property: clip-path, opacity, filter, translate;
+      transition-duration: 0.16s, 0.26s;
+      transition-timing-function: ease-out;
+    }
+  }
+{% endstyle %}

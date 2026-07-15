@@ -1,0 +1,711 @@
+{%- doc -%}
+  Scroll Story Product Section
+{%- enddoc -%}
+
+{% liquid
+  assign total_step_duration = 0
+  for block in section.blocks
+    assign total_step_duration = total_step_duration | plus: block.settings.scroll_duration
+  endfor
+%}
+
+<scroll-story-component id="scroll-story-{{ section.id }}" class="scroll-story spacing-style" style="--total-height: {{ total_step_duration }}vh; {% render 'spacing-style' %}">
+
+  <div class="story-media" style="--desktop-height: {{ section.settings.desktop_height }}vh; --mobile-height: {{ section.settings.mobile_height }}vh;">
+    {% if section.settings.image != blank %}
+      <img
+        src="{{ section.settings.image | image_url: width: 2000 }}"
+        class="story-image"
+        loading="lazy"
+        width="2000"
+        height="{{ 2000 | divided_by: section.settings.image.aspect_ratio | round }}"
+        alt="{{ section.settings.image.alt | escape }}"
+      >
+    {% else %}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'story-image placeholder' }}
+    {% endif %}
+    
+    <div class="story-overlay" style="
+      {% if section.settings.enable_overlay_gradient %}
+        background: linear-gradient(
+          {{ section.settings.gradient_direction }},
+          {{ section.settings.gradient_color_1 }} 0%,
+          {{ section.settings.gradient_color_2 }} 100%
+        );
+      {% else %}
+        background-color: {{ section.settings.overlay_color }};
+      {% endif %}
+      opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    "></div>
+
+    <div class="story-content">
+      {% for block in section.blocks %}
+        {% assign block_id = block.id %}
+        <div 
+          class="story-step step-{{ forloop.index0 }} pos-{{ block.settings.vertical_alignment }}-{{ block.settings.horizontal_alignment }} mobile-pos-{{ block.settings.mobile_vertical_alignment }}-{{ block.settings.mobile_horizontal_alignment }}" 
+          data-index="{{ forloop.index0 }}"
+          data-duration="{{ block.settings.scroll_duration }}"
+          {{ block.shopify_attributes }}
+        >
+          <div class="step-inner" style="
+            text-align: {{ block.settings.text_alignment }};
+            max-width: {{ block.settings.content_max_width }}px;
+            --mobile-text-alignment: {{ block.settings.mobile_text_alignment }};
+            --mobile-max-width: {{ block.settings.mobile_content_max_width }}px;
+          ">
+            {% if block.settings.heading != blank %}
+              <h2 class="step-heading {{ block.settings.heading_size }} mobile-{{ block.settings.mobile_heading_size }}" style="
+                color: {{ block.settings.text_color }};
+                {% if block.settings.heading_uppercase %}text-transform: uppercase;{% endif %}
+                {% if block.settings.enable_text_shadow %}text-shadow: 0 2px 4px rgba(0,0,0,0.5);{% endif %}
+              ">
+                {{ block.settings.heading }}
+              </h2>
+            {% endif %}
+
+            {% if block.settings.description != blank %}
+              <div class="step-description {{ block.settings.description_style }}" style="
+                color: {{ block.settings.text_color }};
+                {% if block.settings.description_uppercase %}text-transform: uppercase;{% endif %}
+                {% if block.settings.enable_text_shadow %}text-shadow: 0 1px 3px rgba(0,0,0,0.3);{% endif %}
+              ">
+                {{ block.settings.description }}
+              </div>
+            {% endif %}
+
+            {% if block.settings.button_label != blank or block.settings.button_label_2 != blank %}
+              <div class="step-buttons" style="
+                justify-content: {% if block.settings.text_alignment == 'center' %}center{% elsif block.settings.text_alignment == 'right' %}flex-end{% else %}flex-start{% endif %};
+                --mobile-justify: {% if block.settings.mobile_text_alignment == 'center' %}center{% elsif block.settings.mobile_text_alignment == 'right' %}flex-end{% else %}flex-start{% endif %};
+              ">
+                {% if block.settings.button_label != blank %}
+                  <a href="{{ block.settings.button_link }}" class="button button--red {% if block.settings.button_style_secondary %}button--secondary{% else %}button--primary{% endif %}">
+                    {{ block.settings.button_label }}
+                  </a>
+                {% endif %}
+                
+                {% if block.settings.button_label_2 != blank %}
+                  <a href="{{ block.settings.button_link_2 }}" class="button button--red {% if block.settings.button_style_secondary_2 %}button--secondary{% else %}button--primary{% endif %}">
+                    {{ block.settings.button_label_2 }}
+                  </a>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script type="application/json" data-settings>
+    {
+      "zoomIntensity": {{ section.settings.zoom_intensity | divided_by: 100.0 | default: 0.3 }},
+      "persistLast": {{ section.settings.persist_last_step | default: true }}
+    }
+  </script>
+</scroll-story-component>
+
+{% stylesheet %}
+  scroll-story-component {
+    display: block;
+    position: relative;
+    height: var(--total-height);
+  }
+
+  .story-media {
+    position: sticky;
+    top: 0;
+    height: var(--desktop-height, 100vh);
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  @media screen and (max-width: 749px) {
+    .story-media {
+      height: var(--mobile-height, 100vh);
+    }
+  }
+
+  .story-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1);
+    will-change: transform;
+  }
+
+  .story-overlay {
+    position: absolute;
+    inset: 0;
+  }
+
+  .story-content {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .story-step {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
+    padding: 40px;
+  }
+
+  .story-step.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .pos-top-left { align-items: flex-start; justify-content: flex-start; }
+  .pos-top-center { align-items: flex-start; justify-content: center; }
+  .pos-top-right { align-items: flex-start; justify-content: flex-end; }
+  .pos-center-left { align-items: center; justify-content: flex-start; }
+  .pos-center-center { align-items: center; justify-content: center; }
+  .pos-center-right { align-items: center; justify-content: flex-end; }
+  .pos-bottom-left { align-items: flex-end; justify-content: flex-start; }
+  .pos-bottom-center { align-items: flex-end; justify-content: center; }
+  .pos-bottom-right { align-items: flex-end; justify-content: flex-end; }
+
+  @media screen and (max-width: 749px) {
+    .mobile-pos-top-left { align-items: flex-start; justify-content: flex-start; }
+    .mobile-pos-top-center { align-items: flex-start; justify-content: center; }
+    .mobile-pos-top-right { align-items: flex-start; justify-content: flex-end; }
+    .mobile-pos-center-left { align-items: center; justify-content: flex-start; }
+    .mobile-pos-center-center { align-items: center; justify-content: center; }
+    .mobile-pos-center-right { align-items: center; justify-content: flex-end; }
+    .mobile-pos-bottom-left { align-items: flex-end; justify-content: flex-start; }
+    .mobile-pos-bottom-center { align-items: flex-end; justify-content: center; }
+    .mobile-pos-bottom-right { align-items: flex-end; justify-content: flex-end; }
+    .story-step { padding: 20px; }
+  }
+
+  .step-inner {
+    margin: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .step-inner {
+      text-align: var(--mobile-text-alignment, center) !important;
+      max-width: var(--mobile-max-width, 100%) !important;
+    }
+  }
+
+  .step-heading {
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .step-description {
+    margin-top: 15px;
+  }
+
+  .step-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 24px;
+    pointer-events: auto;
+  }
+
+  @media screen and (max-width: 749px) {
+    .step-buttons {
+      justify-content: var(--mobile-justify, center) !important;
+    }
+  }
+
+  /* Custom Red Button specifically for Scroll Story as requested by user */
+  .button--red.button--primary {
+    background-color: #C8102E;
+    color: #ffffff;
+    border-color: #C8102E;
+  }
+  .button--red.button--primary:hover {
+    background-color: #a00d25;
+    border-color: #a00d25;
+  }
+  .button--red.button--secondary {
+    background-color: transparent;
+    color: #ffffff;
+    border-color: #ffffff;
+  }
+  .button--red.button--secondary:hover {
+    background-color: #ffffff;
+    color: #000000;
+  }
+{% endstylesheet %}
+
+<script type="module">
+  import { Component } from '@theme/component';
+  
+  if (!customElements.get('scroll-story-component')) {
+    customElements.define('scroll-story-component', class ScrollStoryComponent extends Component {
+      connectedCallback() {
+        super.connectedCallback();
+        
+        const settingsEl = this.querySelector('[data-settings]');
+        const settings = settingsEl ? JSON.parse(settingsEl.textContent) : {};
+        
+        this.image = this.querySelector('.story-image');
+        this.steps = this.querySelectorAll('.story-step');
+        this.zoomIntensity = settings.zoomIntensity || 0.3;
+        this.persistLast = settings.persistLast ?? true;
+        
+        this.ticking = false;
+        this.isVisible = false;
+
+        const stepDurations = Array.from(this.steps).map(s => parseFloat(s.dataset.duration));
+        const totalDuration = stepDurations.reduce((a, b) => a + b, 0);
+        
+        this.stepThresholds = [];
+        let cumulative = 0;
+        stepDurations.forEach(d => {
+          const start = cumulative / totalDuration;
+          cumulative += d;
+          const end = cumulative / totalDuration;
+          this.stepThresholds.push({ start, end });
+        });
+
+        this.observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            this.isVisible = entry.isIntersecting;
+            if (this.isVisible) {
+              window.addEventListener('scroll', this.onScroll, { passive: true });
+              this.updateStory();
+            } else {
+              window.removeEventListener('scroll', this.onScroll);
+            }
+          });
+        }, { threshold: 0, rootMargin: '0px' });
+
+        this.observer.observe(this);
+        window.addEventListener('resize', this.onResize);
+      }
+      
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        this.observer.disconnect();
+        window.removeEventListener('scroll', this.onScroll);
+        window.removeEventListener('resize', this.onResize);
+      }
+      
+      onScroll = () => {
+        if (!this.ticking) {
+          requestAnimationFrame(() => this.updateStory());
+          this.ticking = true;
+        }
+      }
+      
+      onResize = () => {
+        if (this.isVisible) this.updateStory();
+      }
+      
+      updateStory() {
+        if (!this.isVisible) return;
+        
+        const rect = this.getBoundingClientRect();
+        const scrollEnd = rect.height - window.innerHeight;
+        
+        let progress = scrollEnd > 0 ? -rect.top / scrollEnd : 0;
+        progress = Math.min(Math.max(progress, 0), 1);
+
+        const zoom = 1 + progress * this.zoomIntensity;
+        if (this.image) this.image.style.transform = `scale(${zoom})`;
+
+        const stepCount = this.steps.length;
+        
+        this.steps.forEach((step, i) => {
+          const { start, end } = this.stepThresholds[i];
+
+          if (i === stepCount - 1 && this.persistLast) {
+            if (progress >= start) {
+               step.classList.add('active');
+            } else {
+               step.classList.remove('active');
+            }
+          } 
+          else {
+            if (progress >= start && progress < end) {
+               step.classList.add('active');
+            } else {
+               step.classList.remove('active');
+            }
+          }
+        });
+
+        this.ticking = false;
+      }
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Scroll Story Product",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "range",
+      "id": "zoom_intensity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Zoom Intensity",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay_gradient",
+      "label": "Enable overlay gradient",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "gradient_direction",
+      "label": "Gradient direction",
+      "options": [
+        { "value": "to bottom", "label": "Top to bottom" },
+        { "value": "to top", "label": "Bottom to top" },
+        { "value": "to right", "label": "Left to right" },
+        { "value": "to left", "label": "Right to left" }
+      ],
+      "default": "to bottom"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_1",
+      "label": "Gradient start color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_2",
+      "label": "Gradient end color",
+      "default": "transparent"
+    },
+    {
+      "type": "header",
+      "content": "Section Dimensions"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Desktop Sticky Height",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Mobile Sticky Height",
+      "default": 100
+    },
+    {
+      "type": "checkbox",
+      "id": "persist_last_step",
+      "label": "Keep last story step visible",
+      "default": true,
+      "info": "If checked, the final story content won't disappear when reaching the bottom."
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Story Step",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Timing"
+        },
+        {
+          "type": "range",
+          "id": "scroll_duration",
+          "min": 40,
+          "max": 300,
+          "step": 10,
+          "unit": "vh",
+          "label": "Scroll duration",
+          "default": 100,
+          "info": "How much scroll space this step occupies."
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Oversized Heavyweight Tee"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            { "value": "h2", "label": "Small" },
+            { "value": "h1", "label": "Medium" },
+            { "value": "h0", "label": "Large" }
+          ],
+          "default": "h1",
+          "label": "Heading size"
+        },
+        {
+          "type": "checkbox",
+          "id": "heading_uppercase",
+          "label": "Heading Uppercase",
+          "default": true
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "select",
+          "id": "description_style",
+          "options": [
+            { "value": "body", "label": "Body" },
+            { "value": "subtitle", "label": "Subtitle" },
+            { "value": "uppercase", "label": "Uppercase" }
+          ],
+          "default": "body",
+          "label": "Description style"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_text_shadow",
+          "label": "Enable text shadow",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Desktop Positioning"
+        },
+        {
+          "type": "select",
+          "id": "horizontal_alignment",
+          "label": "Horizontal alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "vertical_alignment",
+          "label": "Vertical alignment",
+          "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "center", "label": "Center" },
+            { "value": "bottom", "label": "Bottom" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "content_max_width",
+          "min": 300,
+          "max": 1000,
+          "step": 50,
+          "unit": "px",
+          "label": "Content max width",
+          "default": 700
+        },
+        {
+          "type": "header",
+          "content": "Mobile Settings"
+        },
+        {
+          "type": "select",
+          "id": "mobile_heading_size",
+          "options": [
+            { "value": "h2", "label": "Small" },
+            { "value": "h1", "label": "Medium" },
+            { "value": "h0", "label": "Large" }
+          ],
+          "default": "h1",
+          "label": "Mobile heading size"
+        },
+        {
+          "type": "select",
+          "id": "mobile_horizontal_alignment",
+          "label": "Mobile horizontal alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "mobile_vertical_alignment",
+          "label": "Mobile vertical alignment",
+          "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "center", "label": "Center" },
+            { "value": "bottom", "label": "Bottom" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "mobile_text_alignment",
+          "label": "Mobile text alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "mobile_content_max_width",
+          "min": 200,
+          "max": 600,
+          "step": 20,
+          "unit": "px",
+          "label": "Mobile content max width",
+          "default": 340
+        },
+        {
+          "type": "header",
+          "content": "Buttons"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button 1 label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button 1 link"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary",
+          "label": "Use secondary button style",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "label": "Button 2 label"
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "Button 2 link"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary_2",
+          "label": "Use secondary button style",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scroll Story Product",
+      "blocks": [
+        { "type": "step", "settings": { "heading": "Oversized Heavyweight Tee", "scroll_duration": 150 } },
+        { "type": "step", "settings": { "heading": "Engineered for Strength", "scroll_duration": 100 } },
+        { "type": "step", "settings": { "heading": "Built for Everyday Performance", "scroll_duration": 100 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

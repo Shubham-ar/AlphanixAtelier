@@ -793,10 +793,39 @@
         "padding-block-start": 82,
         "padding-block-end": 82
       }
+    },
+    "sale_hero_custom": {
+      "type": "sale-hero",
+      "settings": {
+        "badge_text": "Last Chance",
+        "title_text": "Big wardrobe upgrade",
+        "description_text": "Best sellers are going fast. Grab premium, ethically made heavyweight tshirts before they're gone.",
+        "button_label": "Shop the sale",
+        "button_link": "/collections/all",
+        "text_alignment": "left",
+        "section_height": 50,
+        "overlay_opacity": 70,
+        "color_badge_bg": "#A16207",
+        "color_badge_text": "#FFFFFF",
+        "color_title": "#FFFFFF",
+        "color_desc": "#E8ECF0",
+        "color_btn_bg": "#A16207",
+        "color_btn_text": "#FFFFFF",
+        "color_btn_hover_bg": "#854D0E",
+        "color_highlights_text": "#FFFFFF",
+        "color_highlights_icon": "#A16207",
+        "icon_1": "star",
+        "text_1": "Premium material",
+        "icon_2": "return",
+        "text_2": "<1% returns",
+        "icon_3": "recycle",
+        "text_3": "Ethically made"
+      }
     }
   },
   "order": [
     "hero_iyt6zg",
+    "sale_hero_custom",
     "collection_links_Ut4aMz",
     "featured_product_mTUbKC",
     "product_list_UwRqN4",

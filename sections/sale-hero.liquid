@@ -21,6 +21,14 @@
     --highlights-text-color: {{ section.settings.color_highlights_text }};
     --highlights-icon-color: {{ section.settings.color_highlights_icon }};
     
+    {%- if section.settings.button_style == 'pill' -%}
+      --btn-border-radius: 9999px;
+    {%- elsif section.settings.button_style == 'square' -%}
+      --btn-border-radius: 0px;
+    {%- else -%}
+      --btn-border-radius: var(--style-border-radius-buttons-primary, 4px);
+    {%- endif -%}
+    
     {%- assign overlay_opacity_decimal = section.settings.overlay_opacity | divided_by: 100.0 -%}
     {%- if section.settings.text_alignment == 'left' -%}
       --overlay-gradient: linear-gradient(to right, rgba(0,0,0,{{ overlay_opacity_decimal }}) 0%, rgba(0,0,0,{{ overlay_opacity_decimal | times: 0.6 }}) 50%, rgba(0,0,0,0) 100%);
@@ -231,6 +239,7 @@
     color: var(--btn-text-color);
     background-color: var(--btn-bg-color);
     border: 1px solid var(--btn-bg-color);
+    border-radius: var(--btn-border-radius, 9999px);
     cursor: pointer;
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -476,6 +485,17 @@
       "id": "color_btn_hover_bg",
       "label": "Button Hover Background",
       "default": "#854D0E"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button Corner Style",
+      "options": [
+        { "value": "pill", "label": "Pill (Rounded)" },
+        { "value": "theme", "label": "Theme Default" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "pill"
     },
     {
       "type": "header",

@@ -338,10 +338,49 @@
         "padding-block-start": 0,
         "padding-block-end": 66
       }
+    },
+    "collection-tabs": {
+      "type": "alphanix-collection-tabs",
+      "blocks": {
+        "tab_regular": {
+          "type": "tab",
+          "settings": {
+            "label": "Regular Fit",
+            "collection_handle": "regular"
+          }
+        },
+        "tab_oversized": {
+          "type": "tab",
+          "settings": {
+            "label": "Oversized",
+            "collection_handle": "oversized"
+          }
+        },
+        "tab_premium": {
+          "type": "tab",
+          "settings": {
+            "label": "Premium",
+            "collection_handle": "premium"
+          }
+        }
+      },
+      "block_order": [
+        "tab_regular",
+        "tab_oversized",
+        "tab_premium"
+      ],
+      "settings": {
+        "show_header": true,
+        "header_text": "Filter by Category",
+        "section_width": "page-width",
+        "padding-block-start": 36,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
     "section",
+    "collection-tabs",
     "main"
   ]
 }

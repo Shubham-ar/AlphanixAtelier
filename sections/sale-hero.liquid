@@ -1,0 +1,575 @@
+{%- liquid
+  assign loading = 'lazy'
+  assign fetchpriority = 'auto'
+  if section.index == 1
+    assign loading = 'eager'
+    assign fetchpriority = 'high'
+  endif
+-%}
+
+{%- style -%}
+  #SaleHero-{{ section.id }} {
+    --sale-hero-height: {{ section.settings.section_height }}vh;
+    --sale-hero-overlay-opacity: {{ section.settings.overlay_opacity }};
+    --badge-bg-color: {{ section.settings.color_badge_bg }};
+    --badge-text-color: {{ section.settings.color_badge_text }};
+    --title-color: {{ section.settings.color_title }};
+    --desc-color: {{ section.settings.color_desc }};
+    --btn-bg-color: {{ section.settings.color_btn_bg }};
+    --btn-text-color: {{ section.settings.color_btn_text }};
+    --btn-hover-bg-color: {{ section.settings.color_btn_hover_bg }};
+    --highlights-text-color: {{ section.settings.color_highlights_text }};
+    --highlights-icon-color: {{ section.settings.color_highlights_icon }};
+    
+    {%- assign overlay_opacity_decimal = section.settings.overlay_opacity | divided_by: 100.0 -%}
+    {%- if section.settings.text_alignment == 'left' -%}
+      --overlay-gradient: linear-gradient(to right, rgba(0,0,0,{{ overlay_opacity_decimal }}) 0%, rgba(0,0,0,{{ overlay_opacity_decimal | times: 0.6 }}) 50%, rgba(0,0,0,0) 100%);
+    {%- else -%}
+      --overlay-gradient: linear-gradient(to left, rgba(0,0,0,{{ overlay_opacity_decimal }}) 0%, rgba(0,0,0,{{ overlay_opacity_decimal | times: 0.6 }}) 50%, rgba(0,0,0,0) 100%);
+    {%- endif -%}
+  }
+{%- endstyle -%}
+
+<div id="SaleHero-{{ section.id }}" class="sale-hero sale-hero--align-{{ section.settings.text_alignment }}">
+  <!-- Background Media -->
+  <div class="sale-hero__media-container">
+    {%- if section.settings.background_image != blank -%}
+      {{
+        section.settings.background_image
+        | image_url: width: 3840
+        | image_tag:
+          loading: loading,
+          fetchpriority: fetchpriority,
+          widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+          alt: section.settings.background_image.alt | default: section.settings.title_text,
+          class: 'sale-hero__bg'
+      }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'sale-hero__bg sale-hero__bg--placeholder' }}
+    {%- endif -%}
+    <div class="sale-hero__overlay"></div>
+  </div>
+  
+  <!-- Content -->
+  <div class="sale-hero__container page-width-normal">
+    <div class="sale-hero__content">
+      {%- if section.settings.badge_text != blank -%}
+        <span class="sale-hero__badge">{{ section.settings.badge_text | escape }}</span>
+      {%- endif -%}
+      
+      {%- if section.settings.title_text != blank -%}
+        <h2 class="sale-hero__title">{{ section.settings.title_text | escape }}</h2>
+      {%- endif -%}
+      
+      {%- if section.settings.description_text != blank -%}
+        <p class="sale-hero__desc">{{ section.settings.description_text | escape }}</p>
+      {%- endif -%}
+      
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <a href="{{ section.settings.button_link }}" class="sale-hero__button">
+          {{ section.settings.button_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+  
+  <!-- Bottom Highlights Bar -->
+  {%- if section.settings.text_1 != blank or section.settings.text_2 != blank or section.settings.text_3 != blank -%}
+    <div class="sale-hero__highlights">
+      <div class="sale-hero__highlights-inner">
+        {%- if section.settings.text_1 != blank -%}
+          <div class="sale-hero__highlight-item">
+            {%- if section.settings.icon_1 != 'none' -%}
+              <svg class="sale-hero__highlight-icon" viewBox="0 0 20 20" fill="currentColor">
+                {% render 'icon', icon: section.settings.icon_1 %}
+              </svg>
+            {%- endif -%}
+            <span>{{ section.settings.text_1 | escape }}</span>
+          </div>
+        {%- endif -%}
+        
+        {%- if section.settings.text_2 != blank -%}
+          <div class="sale-hero__highlight-item">
+            {%- if section.settings.icon_2 != 'none' -%}
+              <svg class="sale-hero__highlight-icon" viewBox="0 0 20 20" fill="currentColor">
+                {% render 'icon', icon: section.settings.icon_2 %}
+              </svg>
+            {%- endif -%}
+            <span>{{ section.settings.text_2 | escape }}</span>
+          </div>
+        {%- endif -%}
+        
+        {%- if section.settings.text_3 != blank -%}
+          <div class="sale-hero__highlight-item">
+            {%- if section.settings.icon_3 != 'none' -%}
+              <svg class="sale-hero__highlight-icon" viewBox="0 0 20 20" fill="currentColor">
+                {% render 'icon', icon: section.settings.icon_3 %}
+              </svg>
+            {%- endif -%}
+            <span>{{ section.settings.text_3 | escape }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .sale-hero {
+    position: relative;
+    overflow: hidden;
+    height: var(--sale-hero-height, 50vh);
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .sale-hero__media-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .sale-hero__bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  .sale-hero__bg--placeholder {
+    background-color: #1c1917;
+    fill: #44403c;
+  }
+
+  .sale-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-gradient);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .sale-hero__container {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    padding-left: var(--page-margin, 40px);
+    padding-right: var(--page-margin, 40px);
+    max-width: var(--normal-page-width, 1400px);
+    margin: 0 auto;
+    display: flex;
+  }
+
+  .sale-hero--align-left .sale-hero__container {
+    justify-content: flex-start;
+  }
+
+  .sale-hero--align-right .sale-hero__container {
+    justify-content: flex-end;
+  }
+
+  .sale-hero__content {
+    max-width: 580px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 60px; /* Space for the bottom highlights bar */
+  }
+
+  .sale-hero--align-right .sale-hero__content {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .sale-hero__badge {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--badge-text-color);
+    background-color: var(--badge-bg-color);
+    padding: 6px 12px;
+    border-radius: 2px;
+    display: inline-block;
+    font-family: var(--font-paragraph--family);
+  }
+
+  .sale-hero__title {
+    font-family: var(--font-h1--family);
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    line-height: 1.1;
+    font-weight: var(--font-h1--weight, 700);
+    letter-spacing: -0.02em;
+    color: var(--title-color);
+    margin: 0;
+    text-transform: var(--font-h1--case, none);
+  }
+
+  .sale-hero__desc {
+    font-family: var(--font-paragraph--family);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--desc-color);
+    margin: 0;
+    max-width: 500px;
+  }
+
+  .sale-hero__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 32px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--btn-text-color);
+    background-color: var(--btn-bg-color);
+    border: 1px solid var(--btn-bg-color);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    font-family: var(--font-paragraph--family);
+  }
+
+  .sale-hero__button:hover {
+    background-color: var(--btn-hover-bg-color);
+    border-color: var(--btn-hover-bg-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .sale-hero__highlights {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 18px 0;
+  }
+
+  .sale-hero__highlights-inner {
+    max-width: var(--normal-page-width, 1400px);
+    margin: 0 auto;
+    padding: 0 var(--page-margin, 40px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .sale-hero__highlight-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--highlights-text-color);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: var(--font-paragraph--family);
+  }
+
+  .sale-hero__highlight-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--highlights-icon-color);
+  }
+
+  @media screen and (max-width: 749px) {
+    .sale-hero {
+      height: auto;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: space-between;
+    }
+    
+    .sale-hero__media-container {
+      height: 100%;
+    }
+
+    .sale-hero__overlay {
+      background: rgba(0, 0, 0, calc(var(--sale-hero-overlay-opacity, 70) * 0.01 + 0.1));
+    }
+
+    .sale-hero__container {
+      padding: 60px 20px 40px 20px;
+      justify-content: center;
+    }
+
+    .sale-hero__content {
+      max-width: 100%;
+      align-items: center;
+      text-align: center;
+      padding-bottom: 0;
+    }
+    
+    .sale-hero--align-right .sale-hero__content {
+      align-items: center;
+      text-align: center;
+    }
+
+    .sale-hero__title {
+      font-size: 2.2rem;
+    }
+
+    .sale-hero__desc {
+      font-size: 1rem;
+    }
+
+    .sale-hero__highlights {
+      position: relative;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 23, 42, 0.85);
+      padding: 24px 0;
+    }
+
+    .sale-hero__highlights-inner {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 0 20px;
+    }
+
+    .sale-hero__highlight-item {
+      justify-content: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Sale Hero Banner",
+  "tag": "section",
+  "class": "shopify-section-sale-hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "min": 30,
+      "max": 80,
+      "step": 5,
+      "unit": "vh",
+      "label": "Section Height (Viewport %)",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "Last Chance"
+    },
+    {
+      "type": "text",
+      "id": "title_text",
+      "label": "Title Text",
+      "default": "Big wardrobe upgrade"
+    },
+    {
+      "type": "textarea",
+      "id": "description_text",
+      "label": "Description Text",
+      "default": "Best sellers are going fast. Grab premium, ethically made heavyweight tshirts before they're gone."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Shop the sale"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Side Position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left Side"
+        },
+        {
+          "value": "right",
+          "label": "Right Side"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "label": "Gradient Overlay Opacity (%)",
+      "default": 70
+    },
+    {
+      "type": "header",
+      "content": "Aesthetics & Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_badge_bg",
+      "label": "Badge Background",
+      "default": "#A16207"
+    },
+    {
+      "type": "color",
+      "id": "color_badge_text",
+      "label": "Badge Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "color_title",
+      "label": "Title Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "color_desc",
+      "label": "Description Color",
+      "default": "#E8ECF0"
+    },
+    {
+      "type": "color",
+      "id": "color_btn_bg",
+      "label": "Button Background",
+      "default": "#A16207"
+    },
+    {
+      "type": "color",
+      "id": "color_btn_text",
+      "label": "Button Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "color_btn_hover_bg",
+      "label": "Button Hover Background",
+      "default": "#854D0E"
+    },
+    {
+      "type": "header",
+      "content": "Bottom Highlights"
+    },
+    {
+      "type": "color",
+      "id": "color_highlights_text",
+      "label": "Highlights Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "color_highlights_icon",
+      "label": "Highlights Icon Color",
+      "default": "#A16207"
+    },
+    {
+      "type": "select",
+      "id": "icon_1",
+      "label": "Highlight 1 Icon",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "star", "label": "Star" },
+        { "value": "shirt", "label": "Shirt" },
+        { "value": "recycle", "label": "Recycle" },
+        { "value": "return", "label": "Return" },
+        { "value": "truck", "label": "Truck" },
+        { "value": "box", "label": "Box" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "lock", "label": "Lock" },
+        { "value": "map_pin", "label": "Map Pin" }
+      ],
+      "default": "star"
+    },
+    {
+      "type": "text",
+      "id": "text_1",
+      "label": "Highlight 1 Text",
+      "default": "Premium material"
+    },
+    {
+      "type": "select",
+      "id": "icon_2",
+      "label": "Highlight 2 Icon",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "star", "label": "Star" },
+        { "value": "shirt", "label": "Shirt" },
+        { "value": "recycle", "label": "Recycle" },
+        { "value": "return", "label": "Return" },
+        { "value": "truck", "label": "Truck" },
+        { "value": "box", "label": "Box" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "lock", "label": "Lock" },
+        { "value": "map_pin", "label": "Map Pin" }
+      ],
+      "default": "return"
+    },
+    {
+      "type": "text",
+      "id": "text_2",
+      "label": "Highlight 2 Text",
+      "default": "<1% returns"
+    },
+    {
+      "type": "select",
+      "id": "icon_3",
+      "label": "Highlight 3 Icon",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "star", "label": "Star" },
+        { "value": "shirt", "label": "Shirt" },
+        { "value": "recycle", "label": "Recycle" },
+        { "value": "return", "label": "Return" },
+        { "value": "truck", "label": "Truck" },
+        { "value": "box", "label": "Box" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "lock", "label": "Lock" },
+        { "value": "map_pin", "label": "Map Pin" }
+      ],
+      "default": "recycle"
+    },
+    {
+      "type": "text",
+      "id": "text_3",
+      "label": "Highlight 3 Text",
+      "default": "Ethically made"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sale Hero Banner"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,260 @@
+{%- doc -%}
+  Alphanix Collection Tabs — Pill-based collection navigation
+  Ported from AlphanixDawnCurrentTheme, adapted to Atelier patterns.
+  Uses blocks so the merchant can add unlimited tabs from the editor.
+{%- enddoc -%}
+
+{% liquid
+  assign current_handle = collection.handle
+%}
+
+<div class="section section--{{ section.settings.section_width | default: 'page-width' }} anx-collection-tabs spacing-style" style="{% render 'spacing-style' %}">
+  <div class="anx-tabs__inner">
+
+    {%- if section.settings.show_header -%}
+      <div class="anx-tabs__header">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="4" y1="6" x2="20" y2="6"/>
+          <line x1="8" y1="12" x2="20" y2="12"/>
+          <line x1="12" y1="18" x2="20" y2="18"/>
+        </svg>
+        <span class="anx-tabs__header-text">{{ section.settings.header_text }}</span>
+      </div>
+    {%- endif -%}
+
+    <nav class="anx-tabs__pills" aria-label="Collection categories">
+
+      {%- comment -%} "All Products" is always the first pill {%- endcomment -%}
+      {% liquid
+        assign all_active = false
+        if current_handle == 'all' or current_handle == blank
+          assign all_active = true
+        endif
+        assign all_count = collections['all'].products_count
+      %}
+      <a
+        href="{{ routes.all_products_collection_url }}"
+        class="anx-tab-pill {% if all_active %}anx-tab-pill--active{% endif %}"
+        {% if all_active %}aria-current="page"{% endif %}
+      >
+        All Products <span class="anx-tab-count">({{ all_count }})</span>
+      </a>
+
+      {%- comment -%} Dynamic tabs from blocks {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        {% liquid
+          assign tab_handle = block.settings.collection_handle
+          assign tab_label = block.settings.label | default: tab_handle
+          assign tab_count = collections[tab_handle].products_count | default: 0
+          assign tab_active = false
+          if current_handle == tab_handle
+            assign tab_active = true
+          endif
+        %}
+        <a
+          href="{{ routes.collections_url }}/{{ tab_handle }}"
+          class="anx-tab-pill {% if tab_active %}anx-tab-pill--active{% endif %}"
+          {% if tab_active %}aria-current="page"{% endif %}
+          {{ block.shopify_attributes }}
+        >
+          {{ tab_label }} <span class="anx-tab-count">({{ tab_count }})</span>
+        </a>
+      {%- endfor -%}
+
+    </nav>
+  </div>
+</div>
+
+{% stylesheet %}
+  .anx-tabs__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-foreground);
+    margin-bottom: var(--padding-md);
+  }
+
+  .anx-tabs__header svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .anx-tabs__header-text {
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+    font-size: var(--font-size--sm);
+  }
+
+  .anx-tabs__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .anx-tab-pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    border-radius: 5rem;
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-20, 0.2));
+    background: transparent;
+    color: var(--color-foreground);
+    font-family: var(--font-body--family, inherit);
+    font-weight: 500;
+    font-size: var(--font-size--sm);
+    text-decoration: none;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
+    white-space: nowrap;
+    padding: 8px 20px;
+  }
+
+  .anx-tab-pill:hover {
+    border-color: rgb(var(--color-foreground-rgb) / var(--opacity-60, 0.6));
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.04));
+    transform: translateY(-1px);
+  }
+
+  .anx-tab-pill--active,
+  .anx-tab-pill--active:hover {
+    background: var(--color-foreground);
+    border-color: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .anx-tab-pill--active:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .anx-tab-count {
+    font-weight: 500;
+    opacity: 0.8;
+    color: inherit;
+    font-size: 0.85em;
+  }
+
+  .anx-tab-pill--active .anx-tab-count {
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 749px) {
+    .anx-tabs__header {
+      margin-bottom: var(--padding-sm);
+    }
+
+    .anx-tabs__header-text {
+      font-size: var(--font-size--xs);
+    }
+
+    .anx-tabs__pills {
+      gap: 8px;
+    }
+
+    .anx-tab-pill {
+      font-size: var(--font-size--xs);
+      padding: 6px 14px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection Tabs",
+  "tag": "section",
+  "class": "anx-collection-tabs-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Show heading row",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "header_text",
+      "label": "Heading text",
+      "default": "Filter by Category"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Collection Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label",
+          "default": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "collection_handle",
+          "label": "Collection handle",
+          "info": "The URL slug of the collection (e.g. 'oversized' for /collections/oversized)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Tabs",
+      "blocks": [
+        { "type": "tab", "settings": { "label": "Regular Fit", "collection_handle": "regular" } },
+        { "type": "tab", "settings": { "label": "Oversized", "collection_handle": "oversized" } },
+        { "type": "tab", "settings": { "label": "Premium", "collection_handle": "premium" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -2,24 +2,34 @@
   Alphanix Lookbook — Staggered parallax image grid
 {% endcomment %}
 
+{{ 'alphanix-lookbook.css' | asset_url | stylesheet_tag }}
+
 {%- style -%}
   #alphanix-lookbook-{{ section.id }} {
-    --bg-color: {{ section.settings.background_color }};
-    --text-color: {{ section.settings.text_color }};
-    --border-color: {{ section.settings.border_color }};
-    
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    border-top: 1px solid var(--border-color);
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+    padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 0 {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+    border-top: 1px solid {{ section.settings.border_color }};
+  }
+  @media screen and (min-width: 750px) {
+    #alphanix-lookbook-{{ section.id }} {
+      padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    }
+  }
+  
+  #alphanix-lookbook-bg-{{ section.id }} {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: 100vw;
   }
 {%- endstyle -%}
 
-<alphanix-lookbook-component class="alphanix-lookbook spacing-style" id="alphanix-lookbook-{{ section.id }}" style="{% render 'spacing-style' %}">
+<section class="alphanix-lookbook section section--{{ section.settings.section_width }}" id="alphanix-lookbook-{{ section.id }}">
   <div class="alphanix-lookbook__bg-text" id="alphanix-lookbook-bg-{{ section.id }}">
     {{ section.settings.background_text }}
   </div>
 
-  <div class="alphanix-container page-width">
+  <div class="alphanix-container">
     <div class="alphanix-lookbook__header">
       <div>
         <div class="alphanix-eyebrow">— {{ section.settings.eyebrow }}</div>
@@ -54,168 +64,49 @@
       </div>
     </div>
   </div>
-</alphanix-lookbook-component>
+</section>
 
-<script type="module">
-  import { Component } from '@theme/component';
-
-  if (!customElements.get('alphanix-lookbook-component')) {
-    customElements.define('alphanix-lookbook-component', class AlphanixLookbookComponent extends Component {
-      connectedCallback() {
-        super.connectedCallback();
-        this.bg = this.querySelector('.alphanix-lookbook__bg-text');
-        this.images = Array.from(this.querySelectorAll('.alphanix-lookbook__large, .alphanix-lookbook__wide, .alphanix-lookbook__square'));
-        this.ticking = false;
-        this.isVisible = false;
-
-        this.observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            this.isVisible = entry.isIntersecting;
-            if (this.isVisible) {
-              window.addEventListener('scroll', this.onScroll, { passive: true });
-              this.updateParallax();
-            } else {
-              window.removeEventListener('scroll', this.onScroll);
-            }
-          });
-        }, { threshold: 0, rootMargin: '100px' });
-
-        this.observer.observe(this);
-      }
-
-      disconnectedCallback() {
-        super.disconnectedCallback();
-        this.observer.disconnect();
-        window.removeEventListener('scroll', this.onScroll);
-      }
-
-      onScroll = () => {
-        if (!this.ticking) {
-          requestAnimationFrame(() => this.updateParallax());
-          this.ticking = true;
-        }
-      }
-
-      updateParallax() {
-        this.ticking = false;
-        if (!this.isVisible) return;
-        
-        const rect = this.getBoundingClientRect();
-        const vH = window.innerHeight;
-        
-        // Progress goes from 0 (just entering bottom) to 1 (just leaving top)
-        const p = Math.min(Math.max((vH - rect.top) / (vH + rect.height), 0), 1);
-        
-        if (this.bg) {
-          this.bg.style.transform = `translateX(${-30 + p * 40}%)`;
-        }
-        
-        this.images.forEach((el, idx) => {
-          if (!el) return;
-          const offsets = [[10, -20], [-15, 30], [5, -10]];
-          const y = offsets[idx][0] + p * offsets[idx][1];
-          const img = el.querySelector('.alphanix-lookbook__image');
-          if (img) img.style.transform = `translateY(${y}%) scale(1.1)`; // scale up slightly so edges don't show when translating
-        });
-      }
-    });
+<script>
+(function() {
+  function initLookbook() {
+    const s = document.getElementById('alphanix-lookbook-{{ section.id }}');
+    if (!s) return;
+    const bg = document.getElementById('alphanix-lookbook-bg-{{ section.id }}');
+    const i1 = document.getElementById('alphanix-lookbook-img1-{{ section.id }}');
+    const i2 = document.getElementById('alphanix-lookbook-img2-{{ section.id }}');
+    const i3 = document.getElementById('alphanix-lookbook-img3-{{ section.id }}');
+    let ticking = false, isVis = false;
+    function onScroll() { if (!ticking) { requestAnimationFrame(update); ticking = true; } }
+    function update() {
+      ticking = false; if (!isVis) return;
+      const r = s.getBoundingClientRect(), vH = window.innerHeight;
+      const p = Math.min(Math.max((vH-r.top)/(vH+r.height),0),1);
+      if (bg) bg.style.transform = 'translateX('+(-30+p*40)+'%)';
+      [i1,i2,i3].forEach((el,idx) => {
+        if (!el) return;
+        const offsets = [[10,-20],[-15,30],[5,-10]];
+        const y = offsets[idx][0]+p*offsets[idx][1];
+        const img = el.querySelector('.alphanix-lookbook__image');
+        if (img) img.style.transform = 'translateY('+y+'%)';
+      });
+    }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        isVis = e.isIntersecting;
+        if (isVis) { window.addEventListener('scroll',onScroll,{passive:true}); update(); }
+        else window.removeEventListener('scroll',onScroll);
+      });
+    }, {threshold:0,rootMargin:'100px'});
+    obs.observe(s);
   }
+  
+  initLookbook();
+  
+  document.addEventListener('shopify:section:load', function(e) {
+    if (e.detail.sectionId === '{{ section.id }}') initLookbook();
+  });
+})();
 </script>
-
-{% stylesheet %}
-  .alphanix-lookbook {
-    position: relative;
-    overflow: hidden;
-    display: block;
-  }
-
-  /* Scrolling background text */
-  .alphanix-lookbook__bg-text {
-    white-space: nowrap;
-    text-transform: uppercase;
-    letter-spacing: -0.02em;
-    opacity: 0.06;
-    line-height: 1;
-    margin-bottom: 4rem;
-    pointer-events: none;
-    font-size: clamp(8rem, 22vw, 22rem);
-    font-weight: 700;
-    will-change: transform;
-  }
-
-  .alphanix-lookbook__header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 3rem;
-  }
-
-  .alphanix-eyebrow {
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  .alphanix-lookbook__heading {
-    text-transform: uppercase;
-    letter-spacing: -0.02em;
-    line-height: 0.9;
-    font-size: clamp(2.5rem, 6vw, 6rem);
-    margin: 0;
-    font-weight: 700;
-  }
-
-  /* Grid layout */
-  .alphanix-lookbook__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  @media screen and (min-width: 750px) {
-    .alphanix-lookbook__grid {
-      grid-template-columns: 7fr 5fr;
-      gap: 1.5rem;
-    }
-  }
-
-  .alphanix-lookbook__large {
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
-  }
-
-  .alphanix-lookbook__stack {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  @media screen and (min-width: 750px) {
-    .alphanix-lookbook__stack {
-      gap: 1.5rem;
-    }
-  }
-
-  .alphanix-lookbook__wide {
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-  }
-
-  .alphanix-lookbook__square {
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-  }
-
-  .alphanix-lookbook__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    will-change: transform;
-    transform: scale(1.1); /* Ensure enough bleed for parallax */
-  }
-{% endstylesheet %}
 
 {% schema %}
 {
@@ -227,6 +118,23 @@
     {"type":"text","id":"eyebrow","label":"Eyebrow label","default":"Lookbook"},
     {"type":"inline_richtext","id":"heading","label":"Heading","default":"On the edge."},
     {"type":"text","id":"background_text","label":"Background scrolling text","default":"ALPHANIX — ALPHANIX"},
+    {"type":"header","content":"Layout"},
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full width"
+        },
+        {
+          "value": "page-width",
+          "label": "Page width"
+        }
+      ],
+      "default": "page-width"
+    },
     {"type":"header","content":"Images"},
     {"type":"image_picker","id":"image_1","label":"Large image (left)"},
     {"type":"image_picker","id":"image_2","label":"Top right image"},
@@ -235,9 +143,9 @@
     {"type":"color","id":"background_color","label":"Background color","default":"#0a0a0a"},
     {"type":"color","id":"text_color","label":"Text color","default":"#ffffff"},
     {"type":"color","id":"border_color","label":"Top border color","default":"rgba(255, 255, 255, 0.1)"},
-    {"type":"header","content":"t:content.padding"},
-    {"type":"range","id":"padding-block-start","min":0,"max":200,"step":4,"unit":"px","label":"t:settings.top","default":100},
-    {"type":"range","id":"padding-block-end","min":0,"max":200,"step":4,"unit":"px","label":"t:settings.bottom","default":100}
+    {"type":"header","content":"Section padding"},
+    {"type":"range","id":"padding_top","min":0,"max":200,"step":4,"unit":"px","label":"Padding top","default":100},
+    {"type":"range","id":"padding_bottom","min":0,"max":200,"step":4,"unit":"px","label":"Padding bottom","default":100}
   ],
   "presets": [{"name":"Alphanix Lookbook"}]
 }

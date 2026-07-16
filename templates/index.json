@@ -9,212 +9,144 @@
  */
 {
   "sections": {
-    "hero_iyt6zg": {
-      "type": "hero",
+    "scroll_story_product_JitJeb": {
+      "type": "scroll-story-product",
       "blocks": {
-        "text_tzGazA": {
-          "type": "text",
-          "name": "t:names.text",
+        "step_ad9NNz": {
+          "type": "step",
           "settings": {
-            "text": "<h1>The Elements <br/>of Style</h1>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h1",
-            "font": "var(--font-heading--family)",
-            "font_size": "1rem",
-            "line_height": "tight",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "{{ settings.color_palette.background }}",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "scroll_duration": 70,
+            "heading": "<em>ALPHANIX</em>",
+            "heading_size": "h2",
+            "heading_uppercase": true,
+            "description": "<p><strong>*LAST CHANCE* Grab The Best Sellers Before They Are Gone...</strong></p>",
+            "description_style": "uppercase",
+            "text_color": "#ffffff",
+            "enable_text_shadow": true,
+            "horizontal_alignment": "center",
+            "vertical_alignment": "center",
+            "text_alignment": "center",
+            "content_max_width": 750,
+            "mobile_heading_size": "h1",
+            "mobile_horizontal_alignment": "center",
+            "mobile_vertical_alignment": "center",
+            "mobile_text_alignment": "center",
+            "mobile_content_max_width": 340,
+            "button_label": "Shop Best Sellers →",
+            "button_link": "shopify://collections/best-sellers",
+            "button_style_secondary": false,
+            "button_label_2": "Shop All →",
+            "button_link_2": "",
+            "button_style_secondary_2": true
+          }
+        },
+        "step_hAXLQp": {
+          "type": "step",
+          "disabled": true,
+          "settings": {
+            "scroll_duration": 40,
+            "heading": "Engineered for Strength",
+            "heading_size": "h1",
+            "heading_uppercase": true,
+            "description": "",
+            "description_style": "body",
+            "text_color": "#ffffff",
+            "enable_text_shadow": true,
+            "horizontal_alignment": "center",
+            "vertical_alignment": "center",
+            "text_alignment": "center",
+            "content_max_width": 700,
+            "mobile_heading_size": "h1",
+            "mobile_horizontal_alignment": "center",
+            "mobile_vertical_alignment": "center",
+            "mobile_text_alignment": "center",
+            "mobile_content_max_width": 340,
+            "button_label": "",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": true
+          }
         }
       },
       "block_order": [
-        "text_tzGazA"
+        "step_ad9NNz",
+        "step_hAXLQp"
       ],
+      "name": "Scroll Story Product",
       "settings": {
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/ChatGPT_Image_May_21_2026_02_53_14_PM.png",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "full-screen",
-        "section_height_custom": 50,
-        "background_color": "rgba(0,0,0,0)",
-        "toggle_overlay": true,
-        "overlay_color": "#00000099",
-        "overlay_style": "gradient",
-        "gradient_direction": "to top",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
+        "image": "shopify://shop_images/ChatGPT_Image_May_21_2026_02_53_14_PM.png",
+        "zoom_intensity": 30,
+        "enable_overlay_gradient": true,
+        "overlay_color": "#000000",
+        "overlay_opacity": 40,
+        "gradient_direction": "to bottom",
+        "gradient_color_1": "#000000",
+        "gradient_color_2": "transparent",
+        "desktop_height": 70,
+        "mobile_height": 70,
+        "persist_last_step": true,
         "padding-block-start": 0,
         "padding-block-end": 0
       }
     },
-    "collection_links_Ut4aMz": {
-      "type": "collection-links",
+    "alphanix_marquee_QcEyC7": {
+      "type": "alphanix-marquee",
       "blocks": {
-        "link": {
-          "type": "_collection-link",
-          "static": true,
+        "item_eacQ4e": {
+          "type": "item",
           "settings": {
-            "show_count": true
-          },
-          "blocks": {
-            "title": {
-              "type": "_inline-collection-title",
-              "static": true,
-              "settings": {
-                "font": "var(--font-heading--family)",
-                "weight": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none"
-              },
-              "blocks": {}
-            },
-            "image": {
-              "type": "_image",
-              "static": true,
-              "settings": {
-                "height": "medium",
-                "ratio": "portrait",
-                "border_radius": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
-        }
-      },
-      "name": "Collection links",
-      "settings": {
-        "collection_list": [],
-        "layout": "spotlight",
-        "section_width": "page-width",
-        "alignment": "left",
-        "image_position": "right",
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 82,
-        "padding-block-end": 82
-      }
-    },
-    "featured_product_mTUbKC": {
-      "type": "featured-product",
-      "blocks": {
-        "media": {
-          "type": "_media-without-appearance",
-          "static": true,
-          "settings": {
-            "media_type": "image",
-            "link": "",
-            "video_loop": true,
-            "video_autoplay": false,
-            "image_position": "cover",
-            "video_position": "cover"
-          },
-          "blocks": {}
+            "text": "FREE SHIPPING OVER $60"
+          }
         },
-        "featured-product": {
-          "type": "_featured-product",
-          "name": "t:names.product",
-          "static": true,
-          "settings": {},
-          "blocks": {
-            "featured-product-title": {
-              "type": "product-title",
-              "name": "t:names.title",
-              "static": true,
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h5",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "featured-product-price": {
-              "type": "_featured-product-price",
-              "static": true,
-              "settings": {
-                "show_sale_price_first": true,
-                "type_preset": "h5"
-              },
-              "blocks": {}
-            },
-            "featured-product-gallery": {
-              "type": "_featured-product-gallery",
-              "name": "t:names.image",
-              "static": true,
-              "settings": {
-                "image_ratio": "adapt",
-                "constrain_to_viewport": "true"
-              },
-              "blocks": {}
-            },
-            "featured-product-swatches": {
-              "type": "swatches",
-              "name": "t:content.swatches",
-              "static": true,
-              "settings": {
-                "product_swatches_alignment": "flex-start",
-                "product_swatches_alignment_mobile": "flex-start",
-                "hide_padding": false,
-                "product_swatches_padding_top": 4,
-                "product_swatches_padding_bottom": 4,
-                "product_swatches_padding_left": 0,
-                "product_swatches_padding_right": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
+        "item_HPB8bq": {
+          "type": "item",
+          "settings": {
+            "text": "DESIGNED IN TORONTO"
+          }
+        },
+        "item_kQ4UFW": {
+          "type": "item",
+          "settings": {
+            "text": "FREE SHIPPING OVER $60"
+          }
+        },
+        "item_TizBCb": {
+          "type": "item",
+          "settings": {
+            "text": "THE LAST TEE YOU'LL EVER NEED"
+          }
+        },
+        "item_BfP3HV": {
+          "type": "item",
+          "settings": {
+            "text": "PREMIUM HEAVYWEIGHT FABRIC"
+          }
         }
       },
-      "name": "t:names.featured_product",
+      "block_order": [
+        "item_eacQ4e",
+        "item_HPB8bq",
+        "item_kQ4UFW",
+        "item_TizBCb",
+        "item_BfP3HV"
+      ],
+      "custom_css": [
+        "{padding-top: 20px; padding-bottom: 20px; border-bottom: 1px solid #e3e3e3;}"
+      ],
+      "name": "Alphanix Marquee",
       "settings": {
-        "product": "",
-        "layout": "media-left",
-        "background_color": "{{ settings.color_palette.color2 }}",
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "speed": 20,
+        "separator": "✦",
+        "font_size": 9,
+        "font_size_desktop": 10,
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "accent_color": "#c8102e",
+        "border_color": "#FFFFFF",
+        "padding-block-start": 32,
+        "padding-block-end": 32
       }
     },
     "product_list_UwRqN4": {
@@ -257,7 +189,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h3>New this season</h3>",
+                "text": "<h3>Explore Most popular </h3>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -522,13 +454,13 @@
       "name": "Featured collection",
       "settings": {
         "collection": "all",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 4,
-        "columns": 4,
+        "layout_type": "carousel",
+        "carousel_on_mobile": true,
+        "max_products": 5,
+        "columns": 3,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
-        "columns_gap": 26,
+        "columns_gap": 10,
         "rows_gap": 36,
         "icons_style": "arrow",
         "icons_shape": "none",
@@ -536,98 +468,280 @@
         "horizontal_alignment": "flex-start",
         "gap": 28,
         "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 84,
-        "padding-block-end": 100
+        "padding-block-start": 70,
+        "padding-block-end": 50
       }
     },
-    "hero_MVUtj6": {
-      "type": "hero",
+    "collection_links_Ut4aMz": {
+      "type": "collection-links",
       "blocks": {
-        "text_69C6UJ": {
-          "type": "text",
+        "link": {
+          "type": "_collection-link",
+          "static": true,
           "settings": {
-            "text": "<h2>Premium materials and<br/>hand-selected finishing touches</h2>",
-            "width": "fit-content",
-            "max_width": "none",
-            "alignment": "left",
-            "type_preset": "h3",
-            "font": "var(--font-primary--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "{{ settings.color_palette.background }}",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "show_count": true
+          },
+          "blocks": {
+            "title": {
+              "type": "_inline-collection-title",
+              "static": true,
+              "settings": {
+                "font": "var(--font-heading--family)",
+                "weight": "",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none"
+              },
+              "blocks": {}
+            },
+            "image": {
+              "type": "_image",
+              "static": true,
+              "settings": {
+                "height": "medium",
+                "ratio": "portrait",
+                "border_radius": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        }
+      },
+      "disabled": true,
+      "name": "Collection links",
+      "settings": {
+        "collection_list": [],
+        "layout": "spotlight",
+        "section_width": "page-width",
+        "alignment": "left",
+        "image_position": "right",
+        "background_color": "{{ settings.color_palette.background }}",
+        "padding-block-start": 82,
+        "padding-block-end": 82
+      }
+    },
+    "featured_product_mTUbKC": {
+      "type": "featured-product",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {
+            "media_type": "image",
+            "link": "",
+            "video_loop": true,
+            "video_autoplay": false,
+            "image_position": "cover",
+            "video_position": "cover"
           },
           "blocks": {}
         },
-        "text_hzq6cM": {
-          "type": "text",
-          "settings": {
-            "text": "<p><a href=\"/collections/all\" title=\"All products\">Shop now</a></p>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "right",
-            "type_preset": "h6",
-            "font": "var(--font-secondary--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "uppercase",
-            "wrap": "nowrap",
-            "text_color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
+        "featured-product": {
+          "type": "_featured-product",
+          "name": "t:names.product",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "featured-product-title": {
+              "type": "product-title",
+              "name": "t:names.title",
+              "static": true,
+              "settings": {
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "h5",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "featured-product-price": {
+              "type": "_featured-product-price",
+              "static": true,
+              "settings": {
+                "show_sale_price_first": true,
+                "type_preset": "h5"
+              },
+              "blocks": {}
+            },
+            "featured-product-gallery": {
+              "type": "_featured-product-gallery",
+              "name": "t:names.image",
+              "static": true,
+              "settings": {
+                "image_ratio": "adapt",
+                "constrain_to_viewport": "true"
+              },
+              "blocks": {}
+            },
+            "featured-product-swatches": {
+              "type": "swatches",
+              "name": "t:content.swatches",
+              "static": true,
+              "settings": {
+                "product_swatches_alignment": "flex-start",
+                "product_swatches_alignment_mobile": "flex-start",
+                "hide_padding": false,
+                "product_swatches_padding_top": 4,
+                "product_swatches_padding_bottom": 4,
+                "product_swatches_padding_left": 0,
+                "product_swatches_padding_right": 0
+              },
+              "blocks": {}
+            }
           },
-          "blocks": {}
+          "block_order": []
+        }
+      },
+      "disabled": true,
+      "name": "t:names.featured_product",
+      "settings": {
+        "product": "",
+        "layout": "media-left",
+        "background_color": "{{ settings.color_palette.color2 }}",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "sale_hero_custom": {
+      "type": "sale-hero",
+      "settings": {
+        "background_image": "shopify://shop_images/ChatGPT_Image_May_21_2026_04_55_04_PM.png",
+        "section_height": 50,
+        "badge_text": "Limited Time Sale",
+        "title_text": "Last chance. Big wardrobe upgrade",
+        "description_text": "Best sellers are going fast. Grab premium, ethically made heavyweight tshirts before they're gone.",
+        "button_label": "Shop the sale",
+        "button_link": "/collections/all",
+        "text_alignment": "left",
+        "overlay_opacity": 75,
+        "color_badge_bg": "#c8102e",
+        "color_badge_text": "#ffffff",
+        "color_title": "#ffffff",
+        "color_desc": "#e8ecf0",
+        "color_btn_bg": "#c8102e",
+        "color_btn_text": "#ffffff",
+        "color_btn_hover_bg": "#c8102e",
+        "button_style": "pill",
+        "color_highlights_text": "#ffffff",
+        "color_highlights_icon": "#c8102e",
+        "icon_1": "star",
+        "text_1": "Premium material",
+        "icon_2": "return",
+        "text_2": "<1% returns",
+        "icon_3": "recycle",
+        "text_3": "Ethically made"
+      }
+    },
+    "alphanix_why_choose_homepage": {
+      "type": "alphanix-why-choose",
+      "blocks": {
+        "block_1": {
+          "type": "feature",
+          "settings": {
+            "title": "Premium Materials",
+            "description": "Crafted from carefully selected heavyweight fabrics designed to move with you, ensuring peak durability and athletic styling.",
+            "image": "shopify://shop_images/ChatGPT_Image_May_26_2026_04_44_47_PM.png",
+            "open_by_default": false,
+            "icon": "diamond",
+            "custom_svg": "",
+            "link_label": "Explore materials",
+            "link_url": "",
+            "block_accent_color": "",
+            "icon_color": ""
+          }
+        },
+        "block_2": {
+          "type": "feature",
+          "settings": {
+            "title": "Perfect Fit",
+            "description": "Designed with meticulous attention to detail, keeping in mind other popular manufacturers so you don't have to double-guess your size.",
+            "image": "shopify://shop_images/ChatGPT_Image_May_26_2026_03_12_24_PM.png",
+            "open_by_default": false,
+            "icon": "sparkles",
+            "custom_svg": "",
+            "link_label": "Explore materials",
+            "link_url": "",
+            "block_accent_color": "",
+            "icon_color": ""
+          }
+        },
+        "block_3": {
+          "type": "feature",
+          "settings": {
+            "title": "Built to Last",
+            "description": "Made with the best 100% heavyweight cotton you can buy. Ethically sourced and engineered to stay breathable, keeping you dry and comfortable all day.",
+            "image": "shopify://shop_images/ChatGPT_Image_May_26_2026_01_48_36_PM.png",
+            "open_by_default": false,
+            "icon": "shield",
+            "custom_svg": "",
+            "link_label": "Explore materials",
+            "link_url": "",
+            "block_accent_color": "",
+            "icon_color": ""
+          }
         }
       },
       "block_order": [
-        "text_69C6UJ",
-        "text_hzq6cM"
+        "block_1",
+        "block_2",
+        "block_3"
       ],
-      "name": "t:names.hero",
       "settings": {
-        "media_type_1": "image",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "row",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 16,
+        "eyebrow": "Why Alphanix",
+        "heading_size": "h3",
+        "heading": "Engineered for Excellence",
+        "description_size": "md",
+        "description": "We design high-performance activewear that seamlessly integrates comfort, durability, and bold luxury design.",
+        "center_header": true,
+        "accordion_mode": false,
         "section_width": "page-width",
-        "section_height": "large",
-        "section_height_custom": 60,
-        "background_color": "{{ settings.color_palette.foreground }}",
-        "toggle_overlay": true,
-        "overlay_color": "#00000075",
-        "overlay_style": "gradient",
-        "gradient_direction": "to top",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 0,
-        "padding-block-end": 40
+        "width": "half",
+        "custom_width": 50,
+        "pill_radius": 100,
+        "card_radius": 24,
+        "pill_gap": 16,
+        "icon_size": 20,
+        "image_aspect_ratio": "16 / 9",
+        "image_width_ratio": 40,
+        "background_color": "",
+        "text_color": "",
+        "accent_color": "#c8102e",
+        "border_opacity": 15,
+        "card_bg_opacity": 5,
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "alphanix_lookbook_htChVj": {
+      "type": "alphanix-lookbook",
+      "name": "Alphanix Lookbook",
+      "settings": {
+        "eyebrow": "Lookbook",
+        "heading": "On the edge.",
+        "background_text": "ALPHANIX - ALPHANIX",
+        "image_1": "shopify://shop_images/ChatGPT_Image_May_21_2026_05_27_05_PM.png",
+        "image_2": "shopify://shop_images/ChatGPT_Image_May_21_2026_04_56_23_PM_91511e99-6c00-44cd-bce7-6b6eb5269c0e.png",
+        "image_3": "shopify://shop_images/ChatGPT_Image_May_21_2026_05_17_31_PM_03ee58da-873c-4f9b-aa4e-46e14b3174d6.png",
+        "background_color": "#FFFFFF",
+        "text_color": "#000000",
+        "border_color": "rgba(255, 255, 255, 0.1)",
+        "padding-block-start": 100,
+        "padding-block-end": 100
       }
     },
     "section_F9fMc4": {
@@ -677,7 +791,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h2>A size for every occasion</h2>",
+                "text": "<h2>Premium. ethically sourced. 100% cotton. </h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -699,14 +813,14 @@
               },
               "blocks": {}
             },
-            "button_aCXUUG": {
+            "button_BLkGqQ": {
               "type": "button",
               "name": "t:names.button",
               "settings": {
-                "label": "SHOP NOW",
+                "label": "Shop now →",
                 "link": "shopify://collections/all",
                 "open_in_new_tab": false,
-                "style_class": "button-unstyled",
+                "style_class": "button",
                 "custom_button_background": "{{ settings.color_palette.foreground }}",
                 "custom_button_text": "{{ settings.color_palette.background }}",
                 "custom_button_border": "{{ settings.color_palette.background }}",
@@ -721,13 +835,15 @@
           },
           "block_order": [
             "text_XmzkXY",
-            "button_aCXUUG"
+            "button_BLkGqQ"
           ]
         },
         "comparison_slider_YEKHnD": {
           "type": "comparison-slider",
           "name": "t:names.comparison_slider",
           "settings": {
+            "before_image": "shopify://shop_images/ChatGPT_Image_May_21_2026_05_17_31_PM_03ee58da-873c-4f9b-aa4e-46e14b3174d6.png",
+            "after_image": "shopify://shop_images/ChatGPT_Image_May_26_2026_04_44_47_PM.png",
             "slider_style": "horizontal",
             "show_text": false,
             "before_text": "",
@@ -793,98 +909,17 @@
         "padding-block-start": 82,
         "padding-block-end": 82
       }
-    },
-    "sale_hero_custom": {
-      "type": "sale-hero",
-      "settings": {
-        "badge_text": "Last Chance",
-        "title_text": "Big wardrobe upgrade",
-        "description_text": "Best sellers are going fast. Grab premium, ethically made heavyweight tshirts before they're gone.",
-        "button_label": "Shop the sale",
-        "button_link": "/collections/all",
-        "text_alignment": "left",
-        "section_height": 50,
-        "overlay_opacity": 70,
-        "color_badge_bg": "#A16207",
-        "color_badge_text": "#FFFFFF",
-        "color_title": "#FFFFFF",
-        "color_desc": "#E8ECF0",
-        "color_btn_bg": "#A16207",
-        "color_btn_text": "#FFFFFF",
-        "color_btn_hover_bg": "#854D0E",
-        "color_highlights_text": "#FFFFFF",
-        "color_highlights_icon": "#A16207",
-        "icon_1": "star",
-        "text_1": "Premium material",
-        "icon_2": "return",
-        "text_2": "<1% returns",
-        "icon_3": "recycle",
-        "text_3": "Ethically made"
-      }
-    },
-    "alphanix_why_choose_homepage": {
-      "type": "alphanix-why-choose",
-      "blocks": {
-        "block_1": {
-          "type": "feature",
-          "settings": {
-            "title": "Premium Materials",
-            "description": "Crafted from carefully selected heavyweight fabrics designed to move with you, ensuring peak durability and athletic styling.",
-            "icon": "diamond",
-            "open_by_default": false
-          }
-        },
-        "block_2": {
-          "type": "feature",
-          "settings": {
-            "title": "Perfect Fit",
-            "description": "Designed with meticulous attention to detail, keeping in mind other popular manufacturers so you don't have to double-guess your size.",
-            "icon": "sparkles",
-            "open_by_default": false
-          }
-        },
-        "block_3": {
-          "type": "feature",
-          "settings": {
-            "title": "Built to Last",
-            "description": "Made with the best 100% heavyweight cotton you can buy. Ethically sourced and engineered to stay breathable, keeping you dry and comfortable all day.",
-            "icon": "shield",
-            "open_by_default": false
-          }
-        }
-      },
-      "block_order": [
-        "block_1",
-        "block_2",
-        "block_3"
-      ],
-      "settings": {
-        "eyebrow": "Why Alphanix",
-        "heading": "Engineered for Excellence",
-        "description": "We design high-performance activewear that seamlessly integrates comfort, durability, and bold luxury design.",
-        "center_header": true,
-        "accordion_mode": false,
-        "section_width": "page-width",
-        "width": "half",
-        "pill_radius": 100,
-        "card_radius": 24,
-        "pill_gap": 16,
-        "accent_color": "#C8102E",
-        "border_opacity": 15,
-        "card_bg_opacity": 5,
-        "padding-block-start": 80,
-        "padding-block-end": 80
-      }
     }
   },
   "order": [
-    "hero_iyt6zg",
-    "sale_hero_custom",
+    "scroll_story_product_JitJeb",
+    "alphanix_marquee_QcEyC7",
+    "product_list_UwRqN4",
     "collection_links_Ut4aMz",
     "featured_product_mTUbKC",
-    "product_list_UwRqN4",
-    "hero_MVUtj6",
-    "section_F9fMc4",
-    "alphanix_why_choose_homepage"
+    "sale_hero_custom",
+    "alphanix_why_choose_homepage",
+    "alphanix_lookbook_htChVj",
+    "section_F9fMc4"
   ]
 }

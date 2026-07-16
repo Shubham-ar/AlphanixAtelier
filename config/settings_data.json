@@ -9,6 +9,9 @@
  */
 {
   "current": {
+    "logo": "shopify://shop_images/icon_cropped.png",
+    "logo_inverse": "shopify://shop_images/icon_white_cropped.png",
+    "favicon": "shopify://shop_images/exact_logo_transparent_smaller_cropped.png",
     "page_text_color": "{{ settings.color_palette.foreground }}",
     "type_body_font": "roboto_n4",
     "type_subheading_font": "montserrat_n7",
@@ -39,6 +42,7 @@
     "type_letter_spacing_h6": "heading-normal",
     "type_case_h6": "uppercase",
     "page_background_color": "{{ settings.color_palette.background }}",
+    "page_width": "wide",
     "badge_corner_radius": 100,
     "badge_sale_background_color": "{{ settings.color_palette.color1 }}",
     "badge_sale_text_color": "{{ settings.color_palette.background }}",
@@ -59,7 +63,8 @@
     "button_text_case_secondary": "uppercase",
     "cart_type": "drawer",
     "cart_price_font": "primary",
-    "show_add_discount_code": false,
+    "auto_open_cart_drawer": true,
+    "show_add_discount_code": true,
     "drawer_background_color": "{{ settings.color_palette.background }}",
     "drawer_text_color": "{{ settings.color_palette.foreground }}",
     "drawer_border_color": "{{ settings.color_palette.color2 }}",
@@ -77,6 +82,7 @@
     "mobile_quick_add": true,
     "quick_add_background": "{{ settings.color_palette.background }}",
     "quick_add_text": "{{ settings.color_palette.foreground }}",
+    "empty_state_collection": "best-sellers",
     "product_corner_radius": 12,
     "card_corner_radius": 12,
     "card_title_case": "uppercase",
@@ -91,6 +97,7 @@
     "palette_selected_variant_border": "{{ settings.color_palette.foreground }}",
     "variant_button_radius": 100,
     "variant_button_width": "default-width-buttons",
+    "content_for_index": [],
     "color_palette": {
       "background": "#ffffff",
       "foreground": "#000000",

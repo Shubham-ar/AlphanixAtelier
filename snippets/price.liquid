@@ -78,7 +78,7 @@
     {% if show_compare_price %}
       <span class="price-item__group">
         <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
-        <span class="compare-at-price">{{- compare_at_price -}}</span>
+        <s class="compare-at-price">{{- compare_at_price -}}</s>
       </span>
     {% endif %}
     <span class="price-item__group">
@@ -112,12 +112,12 @@
         </span>
         <span class="price-item__group">
           <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
-          <span class="price-item--regular compare-at-price">{{- compare_at_price -}}</span>
+          <s class="price-item--regular compare-at-price">{{- compare_at_price -}}</s>
         </span>
       {% else %}
         <span class="price-item__group">
           <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
-          <span class="price-item--regular compare-at-price">{{- compare_at_price -}}</span>
+          <s class="price-item--regular compare-at-price">{{- compare_at_price -}}</s>
         </span>
         <span class="price-item__group">
           <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>

@@ -4012,3 +4012,85 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
     margin-top: calc(var(--header-height) * var(--transparent-header-offset-boolean) * -1);
   }
 }
+
+/* =============================================================
+   ALPHANIX PREMIUM PRICE OVERRIDES
+   Ported from AlphanixDawnCurrentTheme
+   ============================================================= */
+.price, 
+.compare-at-price,
+.price-item,
+product-price .price, 
+product-price .compare-at-price {
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+}
+
+.price-item--regular.compare-at-price,
+product-price .compare-at-price {
+  text-decoration: line-through !important;
+  color: rgb(var(--color-foreground-rgb) / 0.5) !important;
+  font-size: 0.85em !important;
+}
+
+.price-item--sale,
+product-price .price-item--sale {
+  color: #c8102e !important;
+  font-weight: 600 !important;
+}
+
+
+/* =============================================================
+   ALPHANIX PREMIUM HEADER OVERRIDES
+   ============================================================= */
+.header-section:has(> #header-component[sticky="always"]),
+.header-section:has(> #header-component[sticky="scroll-up"][data-sticky-state="active"]) {
+  -webkit-backdrop-filter: saturate(140%) blur(16px);
+  backdrop-filter: saturate(140%) blur(16px);
+  background: color-mix(in oklab, var(--color-background) 80%, transparent);
+}
+
+#header-component[data-sticky-state="active"] .header__underlay-closed,
+#header-component[data-sticky-state="active"] .header__underlay-open {
+  background: transparent !important;
+}
+
+#header-component[data-sticky-state="active"] .header__row {
+  background: transparent !important;
+}
+
+
+/* =============================================================
+   ALPHANIX PREMIUM PRODUCT CARD OVERRIDES
+   ============================================================= */
+.product-card__content .h5,
+.product-card__content h3,
+.product-grid-view-zoom-out--details h3 {
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em;
+}
+
+.product-badges__badge {
+  border-radius: 40px !important; /* Pill shape for badges */
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+  padding: 6px 12px !important;
+  font-weight: 600 !important;
+}
+
+/* Quick add hover effect slide up */
+@media screen and (min-width: 750px) {
+  .product-card {
+    overflow: hidden;
+  }
+  .product-card .quick-add {
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .product-card:hover .quick-add {
+    transform: translateY(0);
+  }
+}
+
+

@@ -1,0 +1,306 @@
+{%- doc -%}
+  Alphanix Product Trust — Compact benefit pills for the PDP buy stack.
+{%- enddoc -%}
+
+{%- liquid
+  assign accent = block.settings.accent_color | default: settings.color_palette.color1
+  assign text_color = block.settings.text_color | default: settings.color_palette.foreground
+  assign pill_bg = block.settings.pill_background | default: settings.color_palette.color2
+-%}
+
+<div
+  class="alphanix-product-trust alphanix-product-trust--{{ block.id }} spacing-style"
+  style="
+    --trust-accent: {{ accent }};
+    --trust-accent-rgb: {{ accent.rgb }};
+    --trust-text: {{ text_color }};
+    --trust-pill-bg: {{ pill_bg }};
+    --trust-radius: {{ block.settings.pill_radius }}px;
+    {% render 'spacing-style', settings: block.settings %}
+  "
+  {{ block.shopify_attributes }}
+>
+  <ul class="alphanix-product-trust__list" role="list">
+    {%- for i in (1..4) -%}
+      {%- liquid
+        assign label_key = 'label_' | append: i
+        assign icon_key = 'icon_' | append: i
+        assign label = block.settings[label_key]
+        assign icon = block.settings[icon_key]
+      -%}
+      {%- if label != blank -%}
+        <li class="alphanix-product-trust__pill">
+          <span class="alphanix-product-trust__icon" aria-hidden="true">
+            {%- case icon -%}
+              {%- when 'truck' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+              {%- when 'pin' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+              {%- when 'fabric' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M11 3 8 9l4 12 4-12-3-6"/><path d="M2 9h20"/></svg>
+              {%- when 'return' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              {%- when 'shield' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 9.7a1 1 0 0 1-.68 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 .76-.97l7-2a1 1 0 0 1 .48 0l7 2A1 1 0 0 1 20 6v7z"/></svg>
+              {%- when 'leaf' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 1 9.8a7 7 0 0 1-9 8.2Z"/><path d="M19 2c-2.26 4.33-5.27 7.14-8 10"/></svg>
+              {%- when 'star' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/></svg>
+              {%- else -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            {%- endcase -%}
+          </span>
+          <span class="alphanix-product-trust__label">{{ label | escape }}</span>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% stylesheet %}
+  .alphanix-product-trust {
+    width: 100%;
+  }
+
+  .alphanix-product-trust__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .alphanix-product-trust__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: var(--trust-radius, 999px);
+    background: var(--trust-pill-bg, var(--color-surface));
+    color: var(--trust-text, var(--color-foreground));
+    border: 1px solid rgb(var(--trust-accent-rgb) / 0.12);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  @media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .alphanix-product-trust__pill:hover {
+      border-color: rgb(var(--trust-accent-rgb) / 0.35);
+      transform: translateY(-1px);
+    }
+  }
+
+  .alphanix-product-trust__icon {
+    display: inline-flex;
+    color: var(--trust-accent, var(--color-accent));
+    flex-shrink: 0;
+  }
+
+  .alphanix-product-trust__icon svg {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .alphanix-product-trust__label {
+    white-space: nowrap;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Alphanix Trust Pills",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Pill 1"
+    },
+    {
+      "type": "text",
+      "id": "label_1",
+      "label": "Label",
+      "default": "Free shipping over $60"
+    },
+    {
+      "type": "select",
+      "id": "icon_1",
+      "label": "Icon",
+      "options": [
+        { "value": "check", "label": "Check" },
+        { "value": "truck", "label": "Shipping" },
+        { "value": "pin", "label": "Location" },
+        { "value": "fabric", "label": "Fabric" },
+        { "value": "return", "label": "Returns" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "star", "label": "Star" }
+      ],
+      "default": "truck"
+    },
+    {
+      "type": "header",
+      "content": "Pill 2"
+    },
+    {
+      "type": "text",
+      "id": "label_2",
+      "label": "Label",
+      "default": "Designed in Toronto"
+    },
+    {
+      "type": "select",
+      "id": "icon_2",
+      "label": "Icon",
+      "options": [
+        { "value": "check", "label": "Check" },
+        { "value": "truck", "label": "Shipping" },
+        { "value": "pin", "label": "Location" },
+        { "value": "fabric", "label": "Fabric" },
+        { "value": "return", "label": "Returns" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "star", "label": "Star" }
+      ],
+      "default": "pin"
+    },
+    {
+      "type": "header",
+      "content": "Pill 3"
+    },
+    {
+      "type": "text",
+      "id": "label_3",
+      "label": "Label",
+      "default": "Premium heavyweight"
+    },
+    {
+      "type": "select",
+      "id": "icon_3",
+      "label": "Icon",
+      "options": [
+        { "value": "check", "label": "Check" },
+        { "value": "truck", "label": "Shipping" },
+        { "value": "pin", "label": "Location" },
+        { "value": "fabric", "label": "Fabric" },
+        { "value": "return", "label": "Returns" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "star", "label": "Star" }
+      ],
+      "default": "fabric"
+    },
+    {
+      "type": "header",
+      "content": "Pill 4"
+    },
+    {
+      "type": "text",
+      "id": "label_4",
+      "label": "Label",
+      "default": "Ethically made"
+    },
+    {
+      "type": "select",
+      "id": "icon_4",
+      "label": "Icon",
+      "options": [
+        { "value": "check", "label": "Check" },
+        { "value": "truck", "label": "Shipping" },
+        { "value": "pin", "label": "Location" },
+        { "value": "fabric", "label": "Fabric" },
+        { "value": "return", "label": "Returns" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "star", "label": "Star" }
+      ],
+      "default": "leaf"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Icon accent",
+      "default": "{{ settings.color_palette.color1 }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "{{ settings.color_palette.foreground }}"
+    },
+    {
+      "type": "color",
+      "id": "pill_background",
+      "label": "Pill background",
+      "default": "{{ settings.color_palette.color2 }}"
+    },
+    {
+      "type": "range",
+      "id": "pill_radius",
+      "label": "Pill radius",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Alphanix Trust Pills"
+    }
+  ]
+}
+{% endschema %}

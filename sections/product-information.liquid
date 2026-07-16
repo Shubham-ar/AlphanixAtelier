@@ -186,15 +186,17 @@
     z-index: calc(var(--layer-sticky) - 1); /* Below sticky header */
     display: block;
     width: 600px;
+    max-width: calc(100vw - 2rem);
     border-radius: calc(
       var(--style-border-radius-buttons-primary) + min(var(--padding-sm), var(--style-border-radius-buttons-primary))
     );
-    box-shadow: var(--shadow-popover);
+    box-shadow: 0 12px 40px rgb(var(--color-foreground-rgb) / 0.12);
     padding: var(--padding-sm);
     /* Layout styling */
     display: flex;
     align-items: center;
     gap: var(--gap-md);
+    border: 1px solid rgb(var(--color-accent-rgb) / 0.12);
 
     @starting-style {
       opacity: 0;
@@ -267,6 +269,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
 
   .sticky-add-to-cart__variant {
@@ -282,6 +286,11 @@
   .sticky-add-to-cart__button {
     height: var(--height-buy-buttons);
     position: relative;
+    flex-shrink: 0;
+    min-width: 140px;
+    border-radius: var(--style-border-radius-buttons-primary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   /* Mobile adjustments */

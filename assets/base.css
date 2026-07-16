@@ -4035,7 +4035,7 @@ product-price .compare-at-price {
 
 .price-item--sale,
 product-price .price-item--sale {
-  color: #c8102e !important;
+  color: var(--color-accent, #c8102e) !important;
   font-weight: 600 !important;
 }
 
@@ -4059,6 +4059,23 @@ product-price .price-item--sale {
   background: transparent !important;
 }
 
+
+/* =============================================================
+   ALPHANIX PDP DETAILS
+   ============================================================= */
+.product-details .product-inventory__icon-low {
+  color: var(--color-accent, #c8102e);
+}
+
+.product-details .buy-buttons-block .button {
+  letter-spacing: 0.1em;
+}
+
+@media screen and (max-width: 749px) {
+  .product-information .product-details > .group-block {
+    padding-inline: var(--page-margin, 1.25rem);
+  }
+}
 
 /* =============================================================
    ALPHANIX PREMIUM PRODUCT CARD OVERRIDES

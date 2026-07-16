@@ -10,7 +10,7 @@
       assign subtotal_percentage = 100
     endif
   -%}
-  <div class="cart-drawer__free-shipping" style="--free-shipping-color: {{ settings.cart_free_shipping_color | default: '#c81f2f' }};">
+  <div class="cart-drawer__free-shipping" style="--free-shipping-color: {{ settings.cart_free_shipping_color | default: settings.color_palette.color1 }};">
     {%- if cart_total >= threshold_in_cents -%}
       <p class="free-shipping-text" data-complete="true">
         You've unlocked Free Standard Shipping

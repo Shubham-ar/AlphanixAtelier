@@ -112,6 +112,7 @@
                 style="--header-height: 60px;"
               >
                 <scroll-hint class="cart-drawer__items">
+                  {% render 'free-shipping-bar' %}
                   {% render 'cart-products', context: 'drawer' %}
                 </scroll-hint>
 

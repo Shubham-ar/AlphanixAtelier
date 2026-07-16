@@ -1479,6 +1479,26 @@
         "default": "page"
       },
       {
+        "type": "header",
+        "content": "Free Shipping Bar"
+      },
+      {
+        "type": "range",
+        "id": "cart_free_shipping_threshold",
+        "min": 0,
+        "max": 500,
+        "step": 5,
+        "unit": "$",
+        "label": "Free Shipping Threshold",
+        "default": 100
+      },
+      {
+        "type": "color",
+        "id": "cart_free_shipping_color",
+        "label": "Progress Bar Color",
+        "default": "#c81f2f"
+      },
+      {
         "type": "select",
         "id": "product_title_case",
         "label": "t:settings.product_title_case",

@@ -28,6 +28,7 @@
           {%- content_for 'block', id: 'cart-page-title', type: '_cart-title', force_empty: true %}
         </div>
         <div class="cart-page__items">
+          {% render 'free-shipping-bar' %}
           {%- content_for 'block', id: 'cart-page-items', type: '_cart-products', force_empty: true %}
         </div>
         {{ cart_page_more_blocks_content }}
@@ -48,6 +49,7 @@
       </div>
 
       <div class="cart-page__items">
+        {% render 'free-shipping-bar' %}
         {%- content_for 'block', id: 'cart-page-items', type: '_cart-products' %}
       </div>
 

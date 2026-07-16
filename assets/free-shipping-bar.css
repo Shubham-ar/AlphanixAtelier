@@ -1,0 +1,64 @@
+/* ============================================================
+   Free Shipping Bar
+   ============================================================ */
+.cart-drawer__free-shipping {
+  padding: 0 0 1.5rem 0;
+  /* Fix: Atelier uses space-separated rgb values, so we use rgb() with / opacity */
+  border-bottom: 0.1rem solid rgb(var(--color-foreground-rgb) / 0.15);
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+}
+
+.free-shipping-text {
+  margin: 0 0 1rem 0;
+  /* Use Atelier's base typography scale instead of hardcoded rem */
+  font-size: var(--font-paragraph--size, 1.3rem);
+  line-height: 1.5;
+}
+
+.free-shipping-text strong {
+  font-weight: bold;
+  color: var(--free-shipping-color);
+}
+
+.free-shipping-text[data-complete="true"]::before {
+  content: "✓  ";
+  color: var(--free-shipping-color);
+  font-weight: bold;
+}
+
+.free-shipping-progress {
+  display: block;
+  width: 100%;
+  height: 6px;
+  border: none;
+  border-radius: 100px;
+  overflow: hidden;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Track */
+.free-shipping-progress::-webkit-progress-bar {
+  background: rgb(var(--color-foreground-rgb) / 0.08);
+  border-radius: 100px;
+}
+
+/* Fill — width is driven by element .value; JS tweens .value for motion. */
+.free-shipping-progress::-webkit-progress-value {
+  background: var(--free-shipping-color);
+  border-radius: 100px;
+}
+
+.free-shipping-progress::-moz-progress-bar {
+  background: var(--free-shipping-color);
+  border-radius: 100px;
+}
+
+.free-shipping-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: var(--font-size--xs, 1.1rem);
+  opacity: 0.5;
+}

@@ -1,0 +1,30 @@
+{%- if settings.cart_free_shipping_threshold != blank and cart != empty -%}
+  {{ 'free-shipping-bar.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'free-shipping-bar.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+  {%- liquid
+    assign threshold_in_cents = settings.cart_free_shipping_threshold | times: 100
+    assign cart_total = cart.total_price
+    assign subtotal_percentage = cart_total | times: 100 | divided_by: threshold_in_cents
+    if subtotal_percentage > 100
+      assign subtotal_percentage = 100
+    endif
+  -%}
+  <div class="cart-drawer__free-shipping" style="--free-shipping-color: {{ settings.cart_free_shipping_color | default: '#c81f2f' }};">
+    {%- if cart_total >= threshold_in_cents -%}
+      <p class="free-shipping-text" data-complete="true">
+        You've unlocked Free Standard Shipping
+      </p>
+    {%- else -%}
+      {%- assign amount_left = threshold_in_cents | minus: cart_total | money -%}
+      <p class="free-shipping-text">
+        You're <strong><span class="free-shipping-amount">{{ amount_left }}</span></strong> away from Free Standard Shipping
+      </p>
+    {%- endif -%}
+    <progress class="free-shipping-progress" value="{{ subtotal_percentage }}" max="100"></progress>
+    <div class="free-shipping-bar-labels">
+      <span>$0</span>
+      <span>{{ settings.cart_free_shipping_threshold | times: 100 | money_without_trailing_zeros }}</span>
+    </div>
+  </div>
+{%- endif -%}

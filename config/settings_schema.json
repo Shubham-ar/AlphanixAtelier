@@ -60,11 +60,17 @@
     "name": "t:names.colors",
     "settings": [
       {
+        "type": "paragraph",
+        "content": "Color 1 is the Alphanix brand accent (sale badges, section highlights). Color 2 is the muted surface for borders and subtle fills."
+      },
+      {
         "type": "color_palette",
         "id": "color_palette",
         "default": {
           "background": "#ffffff",
-          "foreground": "#000000"
+          "foreground": "#000000",
+          "color1": "#c8102e",
+          "color2": "#f4f4f4"
         }
       }
     ]

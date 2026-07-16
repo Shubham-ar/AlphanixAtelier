@@ -6,8 +6,8 @@
   #why-choose-{{ section.id }} {
     --bg-color: {%- if section.settings.background_color != blank -%}{{ section.settings.background_color }}{%- else -%}var(--color-background){%- endif -%};
     --text-color: {%- if section.settings.text_color != blank -%}{{ section.settings.text_color }}{%- else -%}var(--color-foreground){%- endif -%};
-    --accent-color: {{ section.settings.accent_color }};
-    --accent-rgb: {{ section.settings.accent_color.red }} {{ section.settings.accent_color.green }} {{ section.settings.accent_color.blue }};
+    --accent-color: {%- if section.settings.accent_color != blank -%}{{ section.settings.accent_color }}{%- else -%}var(--color-accent){%- endif -%};
+    --accent-rgb: {%- if section.settings.accent_color != blank -%}{{ section.settings.accent_color.red }} {{ section.settings.accent_color.green }} {{ section.settings.accent_color.blue }}{%- else -%}var(--color-accent-rgb){%- endif -%};
     --border-opacity: {{ section.settings.border_opacity | divided_by: 100.0 }};
     --card-bg-opacity: {{ section.settings.card_bg_opacity | divided_by: 100.0 }};
     --pill-radius: {{ section.settings.pill_radius }}px;
@@ -69,6 +69,8 @@
 {%- endstyle -%}
 
 {%- liquid
+  assign accent_color = section.settings.accent_color | default: settings.color_palette.color1
+
   if section.settings.background_color != blank
     render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
   endif
@@ -101,13 +103,16 @@
     <div class="why-choose__pills">
       {%- for block in section.blocks -%}
         {%- liquid
-          assign row_accent = block.settings.block_accent_color | default: section.settings.accent_color
+          assign row_accent = block.settings.block_accent_color | default: accent_color
           assign row_accent_rgb = row_accent.red | append: ' ' | append: row_accent.green | append: ' ' | append: row_accent.blue
           assign icon_color = block.settings.icon_color | default: row_accent
+          assign pill_heading_size = block.settings.heading_size | default: 'h5'
+          assign content_direction = block.settings.content_direction | default: 'row'
+          assign image_width = block.settings.image_width | default: 100
         -%}
         <details 
           class="why-choose__pill" 
-          style="--block-accent: {{ row_accent }}; --block-accent-rgb: {{ row_accent_rgb }}; --icon-color: {{ icon_color }};"
+          style="--block-accent: {{ row_accent }}; --block-accent-rgb: {{ row_accent_rgb }}; --icon-color: {{ icon_color }}; --stagger-index: {{ forloop.index0 }};"
           {% if block.settings.open_by_default %}open{% endif %}
           {{ block.shopify_attributes }}
         >
@@ -134,7 +139,7 @@
                   {%- endcase -%}
                 {%- endif -%}
               </span>
-              <span class="why-choose__pill-heading h3">{{ block.settings.title }}</span>
+              <span class="why-choose__pill-heading {{ pill_heading_size }}">{{ block.settings.title }}</span>
             </div>
             
             <div class="why-choose__pill-trigger">
@@ -146,7 +151,9 @@
             </div>
           </summary>
           
-          <div class="why-choose__pill-content {% if block.settings.image != blank %}why-choose__pill-content--has-image{% endif %}">
+          <div class="why-choose__pill-content {% if block.settings.image != blank %}why-choose__pill-content--has-image{% endif %}"
+               data-direction="{{ content_direction }}"
+               style="--block-image-width: {{ image_width }}%;{% if block.settings.image_aspect_ratio_block != blank and block.settings.image_aspect_ratio_block != 'use_section' %} --image-aspect-ratio: {{ block.settings.image_aspect_ratio_block }};{% endif %}">
             <div class="why-choose__pill-text-column">
               {%- if block.settings.description != blank -%}
                 <div class="why-choose__pill-description paragraph">{{ block.settings.description }}</div>
@@ -165,16 +172,21 @@
             </div>
             
             {%- if block.settings.image != blank -%}
+              {%- liquid
+                assign pill_image_alt = block.settings.image.alt | default: block.settings.title
+              -%}
               <div class="why-choose__pill-image-column">
                 <div class="why-choose__pill-image-wrapper">
-                  <img 
-                    src="{{ block.settings.image | image_url: width: 800 }}" 
-                    alt="{{ block.settings.image.alt | escape | default: block.settings.title }}" 
-                    class="why-choose__pill-image" 
-                    loading="lazy" 
-                    width="400" 
-                    height="260"
-                  >
+                  {{
+                    block.settings.image
+                    | image_url: width: 1200
+                    | image_tag:
+                      class: 'why-choose__pill-image',
+                      loading: 'lazy',
+                      widths: '400, 600, 800, 1000, 1200',
+                      sizes: '(min-width: 750px) 40vw, 90vw',
+                      alt: pill_image_alt
+                  }}
                 </div>
               </div>
             {%- endif -%}
@@ -199,6 +211,10 @@
           const summary = pill.querySelector('.why-choose__pill-summary');
           const content = pill.querySelector('.why-choose__pill-content');
           let isAnimating = false;
+
+          if (pill.open && content) {
+            content.style.maxHeight = 'none';
+          }
           
           summary.addEventListener('click', (e) => {
             e.preventDefault();
@@ -283,11 +299,12 @@
   }
 
   .why-choose__eyebrow {
-    font-size: 1.1rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.18em;
     margin-bottom: 1.2rem;
-    color: var(--accent-color);
+    color: var(--accent-color, var(--color-accent));
+    font-weight: 600;
   }
 
   .why-choose__heading {
@@ -315,13 +332,10 @@
     width: 100%;
     position: relative;
     overflow: hidden;
-    /* Liquid Glass styling */
     border: 1px solid rgb(var(--text-color-rgb) / var(--border-opacity, 0.08));
     background: rgb(var(--card-bg-rgb) / var(--card-bg-opacity, 0.03));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    
-    /* Satisfying transition of shapes */
     border-radius: var(--pill-radius, 100px);
     transition: border-radius 0.4s cubic-bezier(0.25, 1, 0.5, 1),
                 background-color 0.4s ease,
@@ -329,12 +343,49 @@
                 border-color 0.4s ease,
                 box-shadow 0.4s ease;
     z-index: 1;
+    animation: whyChoosePillIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--stagger-index, 0) * 80ms);
+  }
+
+  .why-choose__pill::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 18%;
+    bottom: 18%;
+    width: 3px;
+    border-radius: 999px;
+    background: var(--block-accent, var(--accent-color, var(--color-accent)));
+    opacity: 0;
+    transform: scaleY(0.4);
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .why-choose__pill[open]::before {
+    opacity: 1;
+    transform: scaleY(1);
+    top: 12%;
+    bottom: 12%;
+  }
+
+  @keyframes whyChoosePillIn {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .why-choose__pill[open] {
     border-radius: var(--card-radius, 24px);
     background-color: rgb(var(--text-color-rgb) / 0.02);
     border-color: rgb(var(--block-accent-rgb) / 0.2);
+    box-shadow: 0 12px 36px rgb(var(--block-accent-rgb) / 0.06);
   }
 
   /* Hover state */
@@ -392,11 +443,17 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    font-size: var(--font-size--sm);
     transition: color 0.3s ease;
   }
 
-  .why-choose__pill:hover .why-choose__pill-heading {
+  .why-choose__pill-heading.h2 { font-size: var(--font-size--xl, 1.5rem); }
+  .why-choose__pill-heading.h3 { font-size: var(--font-size--lg, 1.25rem); }
+  .why-choose__pill-heading.h4 { font-size: var(--font-size--md, 1.05rem); }
+  .why-choose__pill-heading.h5,
+  .why-choose__pill-heading.h6 { font-size: var(--font-size--sm, 0.875rem); }
+
+  .why-choose__pill:hover .why-choose__pill-heading,
+  .why-choose__pill[open] .why-choose__pill-heading {
     color: var(--block-accent);
   }
 
@@ -427,6 +484,7 @@
   }
   .why-choose__pill.is-closing .why-choose__pill-content {
     opacity: 0 !important;
+    padding-block-start: 0 !important;
     padding-block-end: 0 !important;
   }
   .why-choose__pill.is-closing .why-choose__pill-indicator {
@@ -456,20 +514,62 @@
     overflow: hidden;
     max-height: 0;
     opacity: 0;
+    padding-block-start: 0;
     padding-block-end: 0;
     transition: max-height 0.45s cubic-bezier(0.25, 1, 0.5, 1),
                 opacity 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+                padding-block-start 0.45s cubic-bezier(0.25, 1, 0.5, 1),
                 padding-block-end 0.45s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   .why-choose__pill[open] .why-choose__pill-content {
     opacity: 1;
+    padding-block-start: 0.9rem;
     padding-block-end: 2.0rem;
   }
 
+  .why-choose__pill[open] .why-choose__pill-text-column,
+  .why-choose__pill[open] .why-choose__pill-image-column {
+    animation: whyChooseContentIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .why-choose__pill[open] .why-choose__pill-image-column {
+    animation-delay: 0.08s;
+  }
+
+  @keyframes whyChooseContentIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   @media screen and (min-width: 750px) {
-    .why-choose__pill[open] .why-choose__pill-content--has-image {
+    .why-choose__pill[open] .why-choose__pill-content--has-image[data-direction="row"] {
       grid-template-columns: var(--text-width-ratio, 1.2fr) var(--image-width-ratio, 0.8fr);
+    }
+    
+    .why-choose__pill[open] .why-choose__pill-content--has-image[data-direction="row-reverse"] {
+      grid-template-columns: var(--image-width-ratio, 0.8fr) var(--text-width-ratio, 1.2fr);
+    }
+    
+    .why-choose__pill[open] .why-choose__pill-content--has-image[data-direction="row-reverse"] .why-choose__pill-text-column {
+      order: 2;
+    }
+    .why-choose__pill[open] .why-choose__pill-content--has-image[data-direction="row-reverse"] .why-choose__pill-image-column {
+      order: 1;
+    }
+
+    .why-choose__pill[open] .why-choose__pill-content--has-image[data-direction="column"] {
+      grid-template-columns: 1fr;
+    }
+    .why-choose__pill[open] .why-choose__pill-content--has-image[data-direction="column"] .why-choose__pill-image-column {
+      width: var(--block-image-width, 100%);
+      margin: 0 auto;
     }
   }
 
@@ -478,6 +578,7 @@
     flex-direction: column;
     justify-content: center;
     min-height: 0;
+    width: 100%;
   }
 
   .why-choose__pill-description {
@@ -522,14 +623,14 @@
   .why-choose__pill-image-column {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
     min-height: 0;
   }
 
   .why-choose__pill-image-wrapper {
     width: 100%;
     aspect-ratio: var(--image-aspect-ratio, 16 / 10);
-    border-radius: var(--card-radius, 8px);
+    border-radius: calc(var(--card-radius, 24px) * 0.65);
     overflow: hidden;
     border: 1px solid rgb(var(--text-color-rgb) / var(--border-opacity, 0.08));
     background: rgb(var(--card-bg-rgb) / var(--card-bg-opacity, 0.03));
@@ -540,8 +641,8 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transform: scale(1.05);
-    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    transform: scale(1.06);
+    transition: transform 0.85s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   .why-choose__pill[open] .why-choose__pill-image {
@@ -556,7 +657,7 @@
     pointer-events: none;
     background: radial-gradient(
       500px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
-      rgb(var(--block-accent-rgb) / 0.045),
+      rgb(var(--block-accent-rgb) / 0.06),
       transparent 80%
     );
     opacity: 0;
@@ -579,7 +680,7 @@
     }
     
     .why-choose__pill-title-area {
-      gap: 1.5rem;
+      gap: 1rem;
     }
     
     .why-choose__pill-content {
@@ -587,12 +688,32 @@
     }
     
     .why-choose__pill[open] .why-choose__pill-content {
-      gap: 2rem;
-      padding-block-end: 2.5rem;
+      gap: 1.5rem;
+      padding-block-end: 2rem;
     }
     
     .why-choose__pill-image-wrapper {
       aspect-ratio: var(--image-aspect-ratio, 16 / 9);
+    }
+
+    .why-choose__pill::before {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .why-choose__pill,
+    .why-choose__pill[open] .why-choose__pill-text-column,
+    .why-choose__pill[open] .why-choose__pill-image-column {
+      animation: none;
+    }
+
+    .why-choose__pill,
+    .why-choose__pill-content,
+    .why-choose__pill-image,
+    .why-choose__pill-indicator,
+    .why-choose__pill::before {
+      transition: none;
     }
   }
 {% endstylesheet %}
@@ -793,7 +914,7 @@
       "type": "color",
       "id": "accent_color",
       "label": "Accent Color / Glow Effect",
-      "default": "#C8102E"
+      "default": "{{ settings.color_palette.color1 }}"
     },
     {
       "type": "range",
@@ -850,6 +971,59 @@
           "id": "title",
           "label": "Pill Heading",
           "default": "PREMIUM MATERIALS"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading Size",
+          "options": [
+            { "value": "h2", "label": "H2" },
+            { "value": "h3", "label": "H3" },
+            { "value": "h4", "label": "H4" },
+            { "value": "h5", "label": "H5" },
+            { "value": "h6", "label": "H6" }
+          ],
+          "default": "h5"
+        },
+        {
+          "type": "header",
+          "content": "Expanded Layout Settings"
+        },
+        {
+          "type": "select",
+          "id": "content_direction",
+          "label": "Content Direction (Desktop)",
+          "options": [
+            { "value": "row", "label": "Row (Text Left, Image Right)" },
+            { "value": "row-reverse", "label": "Row Reverse (Image Left, Text Right)" },
+            { "value": "column", "label": "Column (Text Top, Image Bottom)" }
+          ],
+          "default": "row"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "label": "Image Width Percentage (when in Column)",
+          "min": 20,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 100,
+          "visible_if": "{{ block.settings.content_direction == 'column' }}"
+        },
+        {
+          "type": "select",
+          "id": "image_aspect_ratio_block",
+          "label": "Image Aspect Ratio Override",
+          "options": [
+            { "value": "use_section", "label": "Use Section Default" },
+            { "value": "16 / 9", "label": "16:9 Landscape" },
+            { "value": "4 / 3", "label": "4:3 Classic" },
+            { "value": "1 / 1", "label": "1:1 Square" },
+            { "value": "3 / 4", "label": "3:4 Portrait" },
+            { "value": "auto", "label": "Auto (Original Ratio)" }
+          ],
+          "default": "use_section"
         },
         {
           "type": "inline_richtext",

@@ -7,20 +7,33 @@
   for block in section.blocks
     assign total_step_duration = total_step_duration | plus: block.settings.scroll_duration
   endfor
+
+  assign hero_loading = 'lazy'
+  assign hero_fetchpriority = 'auto'
+  if section.index == 1
+    assign hero_loading = 'eager'
+    assign hero_fetchpriority = 'high'
+  endif
 %}
 
 <scroll-story-component id="scroll-story-{{ section.id }}" class="scroll-story spacing-style" style="--total-height: {{ total_step_duration }}vh; {% render 'spacing-style' %}">
 
   <div class="story-media" style="--desktop-height: {{ section.settings.desktop_height }}vh; --mobile-height: {{ section.settings.mobile_height }}vh;">
     {% if section.settings.image != blank %}
-      <img
-        src="{{ section.settings.image | image_url: width: 2000 }}"
-        class="story-image"
-        loading="lazy"
-        width="2000"
-        height="{{ 2000 | divided_by: section.settings.image.aspect_ratio | round }}"
-        alt="{{ section.settings.image.alt | escape }}"
-      >
+      {% liquid
+        assign hero_alt = section.settings.image.alt | default: shop.name
+      %}
+      {{
+        section.settings.image
+        | image_url: width: 3840
+        | image_tag:
+          class: 'story-image',
+          loading: hero_loading,
+          fetchpriority: hero_fetchpriority,
+          widths: '750, 1100, 1500, 2000, 2400, 3000, 3840',
+          sizes: '100vw',
+          alt: hero_alt
+      }}
     {% else %}
       {{ 'lifestyle-1' | placeholder_svg_tag: 'story-image placeholder' }}
     {% endif %}
@@ -40,9 +53,8 @@
 
     <div class="story-content">
       {% for block in section.blocks %}
-        {% assign block_id = block.id %}
         <div 
-          class="story-step step-{{ forloop.index0 }} pos-{{ block.settings.vertical_alignment }}-{{ block.settings.horizontal_alignment }} mobile-pos-{{ block.settings.mobile_vertical_alignment }}-{{ block.settings.mobile_horizontal_alignment }}" 
+          class="story-step step-{{ forloop.index0 }} pos-{{ block.settings.vertical_alignment }}-{{ block.settings.horizontal_alignment }} mobile-pos-{{ block.settings.mobile_vertical_alignment }}-{{ block.settings.mobile_horizontal_alignment }}{% if forloop.first %} active{% endif %}" 
           data-index="{{ forloop.index0 }}"
           data-duration="{{ block.settings.scroll_duration }}"
           {{ block.shopify_attributes }}
@@ -202,46 +214,75 @@
   }
 
   .step-heading {
-    margin: 0;
-    line-height: 1.1;
+    margin: 0 0 1rem;
+    line-height: 1.05;
+    letter-spacing: 0.04em;
   }
 
   .step-description {
-    margin-top: 15px;
+    margin: 0 auto 1.75rem;
+    max-width: 28rem;
+    font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+    letter-spacing: 0.12em;
+    line-height: 1.55;
+    opacity: 0.92;
+  }
+
+  .step-description.uppercase {
+    text-transform: uppercase;
+  }
+
+  .step-description p {
+    margin: 0;
   }
 
   .step-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 24px;
+    gap: 0.75rem;
+    margin-top: 0;
     pointer-events: auto;
+  }
+
+  .step-buttons .button {
+    pointer-events: auto;
+    border-radius: var(--style-border-radius-buttons-primary, 999px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    min-height: 2.75rem;
+    padding-inline: 1.5rem;
   }
 
   @media screen and (max-width: 749px) {
     .step-buttons {
       justify-content: var(--mobile-justify, center) !important;
     }
+
+    .step-description {
+      margin-bottom: 1.35rem;
+      letter-spacing: 0.1em;
+    }
   }
 
-  /* Custom Red Button specifically for Scroll Story as requested by user */
+  /* Brand accent CTAs — follow palette Color 1 */
   .button--red.button--primary {
-    background-color: #C8102E;
-    color: #ffffff;
-    border-color: #C8102E;
+    background-color: var(--color-accent, #c8102e);
+    color: var(--color-background, #ffffff);
+    border-color: var(--color-accent, #c8102e);
   }
   .button--red.button--primary:hover {
-    background-color: #a00d25;
-    border-color: #a00d25;
+    background-color: color-mix(in srgb, var(--color-accent, #c8102e) 85%, #000);
+    border-color: color-mix(in srgb, var(--color-accent, #c8102e) 85%, #000);
   }
   .button--red.button--secondary {
     background-color: transparent;
     color: #ffffff;
-    border-color: #ffffff;
+    border: 1px solid rgb(255 255 255 / 0.85);
   }
   .button--red.button--secondary:hover {
     background-color: #ffffff;
     color: #000000;
+    border-color: #ffffff;
   }
 {% endstylesheet %}
 
@@ -290,6 +331,7 @@
 
         this.observer.observe(this);
         window.addEventListener('resize', this.onResize);
+        this.updateStory();
       }
       
       disconnectedCallback() {
@@ -311,8 +353,6 @@
       }
       
       updateStory() {
-        if (!this.isVisible) return;
-        
         const rect = this.getBoundingClientRect();
         const scrollEnd = rect.height - window.innerHeight;
         

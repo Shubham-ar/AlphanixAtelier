@@ -1,0 +1,960 @@
+{% comment %}
+  Alphanix Why Choose Us — Premium centered capsule pills that expand into rounded glassmorphism cards.
+{% endcomment %}
+
+{%- style -%}
+  #why-choose-{{ section.id }} {
+    --bg-color: {%- if section.settings.background_color != blank -%}{{ section.settings.background_color }}{%- else -%}var(--color-background){%- endif -%};
+    --text-color: {%- if section.settings.text_color != blank -%}{{ section.settings.text_color }}{%- else -%}var(--color-foreground){%- endif -%};
+    --accent-color: {{ section.settings.accent_color }};
+    --accent-rgb: {{ section.settings.accent_color.red }} {{ section.settings.accent_color.green }} {{ section.settings.accent_color.blue }};
+    --border-opacity: {{ section.settings.border_opacity | divided_by: 100.0 }};
+    --card-bg-opacity: {{ section.settings.card_bg_opacity | divided_by: 100.0 }};
+    --pill-radius: {{ section.settings.pill_radius }}px;
+    --card-radius: {{ section.settings.card_radius }}px;
+    --pill-gap: {{ section.settings.pill_gap }}px;
+    --icon-size: {{ section.settings.icon_size }}px;
+    --image-aspect-ratio: {{ section.settings.image_aspect_ratio }};
+    --image-width-ratio: {{ section.settings.image_width_ratio }}fr;
+    --text-width-ratio: {{ 100 | minus: section.settings.image_width_ratio }}fr;
+    
+    background-color: var(--bg-color);
+    color: var(--text-color);
+  }
+
+  {%- if section.settings.text_color != blank -%}
+    #why-choose-{{ section.id }} .why-choose__pill {
+      --text-color-rgb: {{ section.settings.text_color.red }} {{ section.settings.text_color.green }} {{ section.settings.text_color.blue }};
+    }
+  {%- else -%}
+    #why-choose-{{ section.id }} .why-choose__pill {
+      --text-color-rgb: var(--color-foreground-rgb);
+    }
+  {%- endif -%}
+
+  {%- if section.settings.background_color != blank -%}
+    #why-choose-{{ section.id }} .why-choose__pill {
+      --card-bg-rgb: {{ section.settings.background_color.red }} {{ section.settings.background_color.green }} {{ section.settings.background_color.blue }};
+    }
+  {%- else -%}
+    #why-choose-{{ section.id }} .why-choose__pill {
+      --card-bg-rgb: var(--color-background-rgb);
+    }
+  {%- endif -%}
+
+  /* Handle custom width sizing and centering */
+  #why-choose-{{ section.id }} .why-choose__container {
+    {%- if section.settings.width == 'custom' -%}
+      max-width: {{ section.settings.custom_width }}%;
+    {%- elsif section.settings.width == 'half' -%}
+      max-width: 50%;
+    {%- elsif section.settings.width == 'narrow' -%}
+      max-width: 800px;
+    {%- elsif section.settings.width == 'medium' -%}
+      max-width: 1100px;
+    {%- elsif section.settings.width == 'wide' -%}
+      max-width: 1400px;
+    {%- elsif section.settings.width == 'full' -%}
+      max-width: 100%;
+    {%- endif -%}
+    width: 100%;
+    margin-inline: auto;
+  }
+  
+  @media screen and (max-width: 900px) {
+    #why-choose-{{ section.id }} .why-choose__container {
+      max-width: 100%; /* Spans full width on mobile for better touch experience */
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  if section.settings.background_color != blank
+    render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
+  endif
+-%}
+
+<div class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"></div>
+
+<alphanix-why-choose 
+  id="why-choose-{{ section.id }}" 
+  class="why-choose section section--{{ section.settings.section_width }} spacing-style {% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}" 
+  style="{%- render 'spacing-style', settings: section.settings -%}"
+  data-testid="why-choose-section"
+  data-accordion-mode="{{ section.settings.accordion_mode }}"
+>
+  <div class="why-choose__container">
+    {%- if section.settings.heading != blank or section.settings.eyebrow != blank or section.settings.description != blank -%}
+      <div class="why-choose__header {% if section.settings.center_header %}why-choose__header--center{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <div class="why-choose__eyebrow">— {{ section.settings.eyebrow }}</div>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="why-choose__heading {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <div class="why-choose__description paragraph why-choose__description--{{ section.settings.description_size }}">{{ section.settings.description }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="why-choose__pills">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign row_accent = block.settings.block_accent_color | default: section.settings.accent_color
+          assign row_accent_rgb = row_accent.red | append: ' ' | append: row_accent.green | append: ' ' | append: row_accent.blue
+          assign icon_color = block.settings.icon_color | default: row_accent
+        -%}
+        <details 
+          class="why-choose__pill" 
+          style="--block-accent: {{ row_accent }}; --block-accent-rgb: {{ row_accent_rgb }}; --icon-color: {{ icon_color }};"
+          {% if block.settings.open_by_default %}open{% endif %}
+          {{ block.shopify_attributes }}
+        >
+          <summary class="why-choose__pill-summary">
+            <div class="why-choose__pill-glow"></div>
+            <div class="why-choose__pill-title-area">
+              <span class="why-choose__pill-icon">
+                {%- if block.settings.custom_svg != blank -%}
+                  {{ block.settings.custom_svg }}
+                {%- elsif block.settings.icon != 'none' -%}
+                  {%- case block.settings.icon -%}
+                    {%- when 'diamond' -%}
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M11 3 8 9l4 12 4-12-3-6"/><path d="M2 9h20"/></svg>
+                    {%- when 'sparkles' -%}
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
+                    {%- when 'leaf' -%}
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 1 9.8a7 7 0 0 1-9 8.2Z"/><path d="M19 2c-2.26 4.33-5.27 7.14-8 10"/></svg>
+                    {%- when 'shield' -%}
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 9.7a1 1 0 0 1-.68 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 .76-.97l7-2a1 1 0 0 1 .48 0l7 2A1 1 0 0 1 20 6v7z"/></svg>
+                    {%- when 'globe' -%}
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                    {%- when 'crown' -%}
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7z"/><path d="M5 16v3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3"/></svg>
+                  {%- endcase -%}
+                {%- endif -%}
+              </span>
+              <span class="why-choose__pill-heading h3">{{ block.settings.title }}</span>
+            </div>
+            
+            <div class="why-choose__pill-trigger">
+              <span class="why-choose__pill-indicator">
+                <svg class="icon icon-caret" width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </summary>
+          
+          <div class="why-choose__pill-content {% if block.settings.image != blank %}why-choose__pill-content--has-image{% endif %}">
+            <div class="why-choose__pill-text-column">
+              {%- if block.settings.description != blank -%}
+                <div class="why-choose__pill-description paragraph">{{ block.settings.description }}</div>
+              {%- endif -%}
+              
+              {%- if block.settings.link_url != blank and block.settings.link_label != blank -%}
+                <div class="why-choose__pill-action">
+                  <a href="{{ block.settings.link_url }}" class="why-choose__link">
+                    <span>{{ block.settings.link_label }}</span>
+                    <svg class="why-choose__link-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+              {%- endif -%}
+            </div>
+            
+            {%- if block.settings.image != blank -%}
+              <div class="why-choose__pill-image-column">
+                <div class="why-choose__pill-image-wrapper">
+                  <img 
+                    src="{{ block.settings.image | image_url: width: 800 }}" 
+                    alt="{{ block.settings.image.alt | escape | default: block.settings.title }}" 
+                    class="why-choose__pill-image" 
+                    loading="lazy" 
+                    width="400" 
+                    height="260"
+                  >
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</alphanix-why-choose>
+
+<script type="module">
+  import { Component } from '@theme/component';
+
+  if (!customElements.get('alphanix-why-choose')) {
+    customElements.define('alphanix-why-choose', class AlphanixWhyChoose extends Component {
+      connectedCallback() {
+        super.connectedCallback();
+        this.accordionMode = this.dataset.accordionMode === 'true';
+        this.pills = this.querySelectorAll('.why-choose__pill');
+        
+        this.pills.forEach(pill => {
+          const summary = pill.querySelector('.why-choose__pill-summary');
+          const content = pill.querySelector('.why-choose__pill-content');
+          let isAnimating = false;
+          
+          summary.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isAnimating) return;
+            
+            if (pill.open) {
+              this.closePill(pill, content, () => isAnimating = false);
+              isAnimating = true;
+            } else {
+              isAnimating = true;
+              if (this.accordionMode) {
+                this.pills.forEach(otherPill => {
+                  if (otherPill !== pill && otherPill.open) {
+                    const otherContent = otherPill.querySelector('.why-choose__pill-content');
+                    this.closePill(otherPill, otherContent, null);
+                  }
+                });
+              }
+              this.openPill(pill, content, () => isAnimating = false);
+            }
+          });
+
+          // Mouse move handler for premium radial glow hover
+          pill.addEventListener('mousemove', (e) => {
+            const rect = pill.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            pill.style.setProperty('--mouse-x', `${x}px`);
+            pill.style.setProperty('--mouse-y', `${y}px`);
+          });
+        });
+      }
+      
+      openPill(pill, content, callback) {
+        pill.open = true;
+        content.style.maxHeight = '0px';
+        void content.offsetWidth; // Force repaint
+        content.style.maxHeight = content.scrollHeight + 60 + 'px';
+        
+        setTimeout(() => {
+          if (pill.open) content.style.maxHeight = 'none';
+          if (callback) callback();
+        }, 450);
+      }
+      
+      closePill(pill, content, callback) {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        pill.classList.add('is-closing');
+        void content.offsetWidth; // Force repaint
+        content.style.maxHeight = '0px';
+        
+        setTimeout(() => {
+          pill.open = false;
+          pill.classList.remove('is-closing');
+          content.style.maxHeight = '';
+          if (callback) callback();
+        }, 450);
+      }
+    });
+  }
+</script>
+
+{% stylesheet %}
+  .why-choose {
+    display: block;
+    position: relative;
+    width: 100%;
+  }
+
+  .why-choose__container {
+    width: 100%;
+  }
+
+  .why-choose__header {
+    margin-bottom: 3.5rem;
+    max-width: 650px;
+  }
+
+  .why-choose__header--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .why-choose__eyebrow {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.2rem;
+    color: var(--accent-color);
+  }
+
+  .why-choose__heading {
+    margin: 0 0 1.2rem 0;
+  }
+
+  .why-choose__description {
+    opacity: 0.8;
+    line-height: 1.6;
+  }
+  .why-choose__description--sm { font-size: var(--font-size--sm, 0.875rem); }
+  .why-choose__description--md { font-size: var(--font-size--md, 1rem); }
+  .why-choose__description--lg { font-size: var(--font-size--lg, 1.125rem); }
+
+  /* Vertical Stack of Pills */
+  .why-choose__pills {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pill-gap, 16px);
+    width: 100%;
+  }
+
+  /* Individual Pill Card */
+  .why-choose__pill {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    /* Liquid Glass styling */
+    border: 1px solid rgb(var(--text-color-rgb) / var(--border-opacity, 0.08));
+    background: rgb(var(--card-bg-rgb) / var(--card-bg-opacity, 0.03));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    /* Satisfying transition of shapes */
+    border-radius: var(--pill-radius, 100px);
+    transition: border-radius 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                background-color 0.4s ease,
+                transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                border-color 0.4s ease,
+                box-shadow 0.4s ease;
+    z-index: 1;
+  }
+
+  .why-choose__pill[open] {
+    border-radius: var(--card-radius, 24px);
+    background-color: rgb(var(--text-color-rgb) / 0.02);
+    border-color: rgb(var(--block-accent-rgb) / 0.2);
+  }
+
+  /* Hover state */
+  @media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .why-choose__pill:hover {
+      transform: translateY(-2px);
+      border-color: rgb(var(--block-accent-rgb) / 0.25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  /* Summary Details Header */
+  .why-choose__pill-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: 1.1rem;
+    padding-inline: 2rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    position: relative;
+    z-index: 3;
+    outline: none;
+  }
+
+  /* Remove default details marker */
+  .why-choose__pill-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .why-choose__pill-title-area {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .why-choose__pill-icon {
+    color: var(--icon-color, var(--block-accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .why-choose__pill-icon svg {
+    width: var(--icon-size, 20px);
+    height: var(--icon-size, 20px);
+    stroke-width: 1.25;
+    display: block;
+  }
+
+  .why-choose__pill-heading {
+    margin: 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: var(--font-size--sm);
+    transition: color 0.3s ease;
+  }
+
+  .why-choose__pill:hover .why-choose__pill-heading {
+    color: var(--block-accent);
+  }
+
+  /* Plus/Minus Indicator */
+  .why-choose__pill-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+  }
+
+  .why-choose__pill-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .why-choose__pill[open] .why-choose__pill-indicator {
+    transform: rotate(180deg);
+  }
+
+  /* Smooth Closing Overrides */
+  .why-choose__pill.is-closing {
+    border-radius: var(--pill-radius, 100px) !important;
+    background-color: rgb(var(--card-bg-rgb) / var(--card-bg-opacity, 0.03)) !important;
+    border-color: rgb(var(--text-color-rgb) / var(--border-opacity, 0.08)) !important;
+  }
+  .why-choose__pill.is-closing .why-choose__pill-content {
+    opacity: 0 !important;
+    padding-block-end: 0 !important;
+  }
+  .why-choose__pill.is-closing .why-choose__pill-indicator {
+    transform: rotate(0deg) !important;
+  }
+
+  .why-choose__pill-indicator svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.25;
+    display: block;
+    transition: color 0.3s ease;
+  }
+
+  .why-choose__pill:hover .why-choose__pill-indicator svg {
+    color: var(--block-accent);
+  }
+
+  /* Expandable Content Area */
+  .why-choose__pill-content {
+    position: relative;
+    z-index: 2;
+    padding-inline: 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    padding-block-end: 0;
+    transition: max-height 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+                padding-block-end 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .why-choose__pill[open] .why-choose__pill-content {
+    opacity: 1;
+    padding-block-end: 2.0rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .why-choose__pill[open] .why-choose__pill-content--has-image {
+      grid-template-columns: var(--text-width-ratio, 1.2fr) var(--image-width-ratio, 0.8fr);
+    }
+  }
+
+  .why-choose__pill-text-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+  }
+
+  .why-choose__pill-description {
+    font-size: var(--font-size--sm);
+    line-height: 1.7;
+    opacity: 0.75;
+    margin: 0;
+    font-weight: 300;
+  }
+
+  .why-choose__pill-action {
+    margin-top: 2rem;
+    display: flex;
+  }
+
+  .why-choose__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: var(--font-size--xs);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .why-choose__link:hover {
+    color: var(--block-accent);
+  }
+
+  .why-choose__link-arrow {
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .why-choose__link:hover .why-choose__link-arrow {
+    transform: translate(3px, -3px);
+  }
+
+  /* Image reveal column */
+  .why-choose__pill-image-column {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 0;
+  }
+
+  .why-choose__pill-image-wrapper {
+    width: 100%;
+    aspect-ratio: var(--image-aspect-ratio, 16 / 10);
+    border-radius: var(--card-radius, 8px);
+    overflow: hidden;
+    border: 1px solid rgb(var(--text-color-rgb) / var(--border-opacity, 0.08));
+    background: rgb(var(--card-bg-rgb) / var(--card-bg-opacity, 0.03));
+  }
+
+  .why-choose__pill-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.05);
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .why-choose__pill[open] .why-choose__pill-image {
+    transform: scale(1);
+  }
+
+  /* Radial hover glow background inside summary */
+  .why-choose__pill-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      500px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+      rgb(var(--block-accent-rgb) / 0.045),
+      transparent 80%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .why-choose__pill:hover .why-choose__pill-glow {
+    opacity: 1;
+  }
+
+  /* Responsive styling */
+  @media screen and (max-width: 749px) {
+    .why-choose__header {
+      margin-bottom: 3rem;
+    }
+    
+    .why-choose__pill-summary {
+      padding-block: 1.2rem;
+      padding-inline: 1.5rem;
+    }
+    
+    .why-choose__pill-title-area {
+      gap: 1.5rem;
+    }
+    
+    .why-choose__pill-content {
+      padding-inline: 1.5rem;
+    }
+    
+    .why-choose__pill[open] .why-choose__pill-content {
+      gap: 2rem;
+      padding-block-end: 2.5rem;
+    }
+    
+    .why-choose__pill-image-wrapper {
+      aspect-ratio: var(--image-aspect-ratio, 16 / 9);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Alphanix Why Choose Us",
+  "tag": "section",
+  "class": "alphanix-why-choose-section",
+  "disabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Label",
+      "default": "Why Alphanix"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading Size",
+      "options": [
+        { "value": "h1", "label": "H1 (Extra Large)" },
+        { "value": "h2", "label": "H2 (Large)" },
+        { "value": "h3", "label": "H3 (Medium)" },
+        { "value": "h4", "label": "H4 (Small)" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Engineered for Excellence"
+    },
+    {
+      "type": "select",
+      "id": "description_size",
+      "label": "Description Size",
+      "options": [
+        { "value": "sm", "label": "Small" },
+        { "value": "md", "label": "Medium" },
+        { "value": "lg", "label": "Large" }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "We design high-performance activewear that seamlessly integrates comfort, durability, and bold luxury design."
+    },
+    {
+      "type": "checkbox",
+      "id": "center_header",
+      "label": "Center align header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "accordion_mode",
+      "label": "Accordion mode (Only one row open)",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section Width (Outer Container)",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Content Width (Inner Container)",
+      "options": [
+        { "value": "fill", "label": "Full Width (100%)" },
+        { "value": "half", "label": "Centered (50%)" },
+        { "value": "narrow", "label": "Narrow (800px)" },
+        { "value": "medium", "label": "Medium (1100px)" },
+        { "value": "wide", "label": "Wide (1400px)" },
+        { "value": "custom", "label": "Custom width percentage" }
+      ],
+      "default": "half"
+    },
+    {
+      "type": "range",
+      "id": "custom_width",
+      "label": "Custom Width Percentage",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50,
+      "visible_if": "{{ section.settings.width == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "pill_radius",
+      "label": "Pill Border Radius (Collapsed)",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 100,
+      "info": "Higher values make it look like a capsule pill."
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card & Image Radius (Expanded)",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24,
+      "info": "Radius of the card when expanded, and images inside."
+    },
+    {
+      "type": "range",
+      "id": "pill_gap",
+      "label": "Gap between Pills",
+      "min": 4,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon Size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Expanded Image Aspect Ratio",
+      "options": [
+        { "value": "16 / 9", "label": "16:9 Landscape" },
+        { "value": "4 / 3", "label": "4:3 Classic" },
+        { "value": "1 / 1", "label": "1:1 Square" },
+        { "value": "3 / 4", "label": "3:4 Portrait" }
+      ],
+      "default": "16 / 9"
+    },
+    {
+      "type": "range",
+      "id": "image_width_ratio",
+      "label": "Image Width vs Text Width",
+      "min": 30,
+      "max": 70,
+      "step": 5,
+      "unit": "%",
+      "default": 40,
+      "info": "How much horizontal space the image takes. Text will take the rest."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "placeholder": "Default theme background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "placeholder": "Default theme text color"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color / Glow Effect",
+      "default": "#C8102E"
+    },
+    {
+      "type": "range",
+      "id": "border_opacity",
+      "label": "Pill Border Opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "card_bg_opacity",
+      "label": "Pill Background Opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Expandable Pill",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Pill Heading",
+          "default": "PREMIUM MATERIALS"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "description",
+          "label": "Pill Description",
+          "default": "Crafted from carefully selected heavyweight fabrics designed to move with you, ensuring peak durability and athletic styling."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Expanded Visual Image",
+          "info": "Displays on the right side when the pill is expanded."
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Select Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "diamond", "label": "Diamond" },
+            { "value": "sparkles", "label": "Sparkles" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "crown", "label": "Crown" }
+          ],
+          "default": "sparkles"
+        },
+        {
+          "type": "textarea",
+          "id": "custom_svg",
+          "label": "Custom SVG Code",
+          "info": "Overrides selected icon. Must have SVG tag with viewBox='0 0 24 24'."
+        },
+        {
+          "type": "header",
+          "content": "Action Link"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link Label",
+          "default": "Explore materials"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        },
+        {
+          "type": "header",
+          "content": "Aesthetics"
+        },
+        {
+          "type": "color",
+          "id": "block_accent_color",
+          "label": "Custom Pill Accent Color",
+          "info": "Overrides the global section accent color for this specific pill."
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Custom Icon Color",
+          "info": "Overrides the accent color specifically for the icon."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Alphanix Why Choose Us",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Premium Materials",
+            "description": "Crafted from carefully selected heavyweight fabrics designed to move with you, ensuring peak durability and athletic styling.",
+            "icon": "diamond",
+            "open_by_default": true
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Perfect Fit",
+            "description": "Designed with meticulous attention to detail, keeping in mind other popular manufacturers so you don't have to double-guess your size.",
+            "icon": "sparkles"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Built to Last",
+            "description": "Made with the best 100% heavyweight cotton you can buy. Ethically sourced and engineered to stay breathable, keeping you dry and comfortable all day.",
+            "icon": "shield"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

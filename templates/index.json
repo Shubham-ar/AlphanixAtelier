@@ -821,6 +821,60 @@
         "icon_3": "recycle",
         "text_3": "Ethically made"
       }
+    },
+    "alphanix_why_choose_homepage": {
+      "type": "alphanix-why-choose",
+      "blocks": {
+        "block_1": {
+          "type": "feature",
+          "settings": {
+            "title": "Premium Materials",
+            "description": "Crafted from carefully selected heavyweight fabrics designed to move with you, ensuring peak durability and athletic styling.",
+            "icon": "diamond",
+            "open_by_default": false
+          }
+        },
+        "block_2": {
+          "type": "feature",
+          "settings": {
+            "title": "Perfect Fit",
+            "description": "Designed with meticulous attention to detail, keeping in mind other popular manufacturers so you don't have to double-guess your size.",
+            "icon": "sparkles",
+            "open_by_default": false
+          }
+        },
+        "block_3": {
+          "type": "feature",
+          "settings": {
+            "title": "Built to Last",
+            "description": "Made with the best 100% heavyweight cotton you can buy. Ethically sourced and engineered to stay breathable, keeping you dry and comfortable all day.",
+            "icon": "shield",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "block_1",
+        "block_2",
+        "block_3"
+      ],
+      "settings": {
+        "eyebrow": "Why Alphanix",
+        "heading": "Engineered for Excellence",
+        "description": "We design high-performance activewear that seamlessly integrates comfort, durability, and bold luxury design.",
+        "center_header": true,
+        "accordion_mode": false,
+        "section_width": "page-width",
+        "width": "half",
+        "pill_radius": 100,
+        "card_radius": 24,
+        "pill_gap": 16,
+        "accent_color": "#C8102E",
+        "border_opacity": 15,
+        "card_bg_opacity": 5,
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
     }
   },
   "order": [
@@ -830,6 +884,7 @@
     "featured_product_mTUbKC",
     "product_list_UwRqN4",
     "hero_MVUtj6",
-    "section_F9fMc4"
+    "section_F9fMc4",
+    "alphanix_why_choose_homepage"
   ]
 }

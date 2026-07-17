@@ -90,6 +90,53 @@
   color: var(--proof-text, #000);
 }
 
+.alphanix-proof__actions {
+  margin-top: 2rem;
+  opacity: 0;
+  transform: translateY(0.75rem);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.3s,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+}
+
+.alphanix-proof.is-visible .alphanix-proof__actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.alphanix-proof__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--proof-text, #000);
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--proof-text, #000);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.alphanix-proof__cta:hover {
+  background-color: var(--proof-text, #000);
+  color: var(--proof-bg, #fff);
+  transform: translateY(-1px);
+}
+
+.alphanix-proof__cta:focus-visible {
+  outline: 2px solid var(--proof-accent, #c8102e);
+  outline-offset: 3px;
+}
+
 @media screen and (min-width: 750px) {
   .alphanix-proof__grid {
     grid-template-columns: repeat(var(--proof-cols, 3), minmax(0, 1fr));
@@ -115,11 +162,16 @@
   .alphanix-proof__description {
     margin-inline: auto;
   }
+
+  .alphanix-proof__actions {
+    text-align: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .alphanix-proof__header,
-  .alphanix-proof__item {
+  .alphanix-proof__item,
+  .alphanix-proof__actions {
     transition: none !important;
     transform: none !important;
     opacity: 1;

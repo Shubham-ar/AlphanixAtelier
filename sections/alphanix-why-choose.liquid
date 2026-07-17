@@ -52,6 +52,14 @@
         {%- endfor -%}
       </div>
     {%- endif -%}
+
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <div class="alphanix-proof__actions" data-proof-reveal>
+        <a href="{{ section.settings.button_link }}" class="alphanix-proof__cta">
+          {{ section.settings.button_label | escape }}
+        </a>
+      </div>
+    {%- endif -%}
   </div>
 </section>
 
@@ -118,6 +126,17 @@
       "id": "description",
       "label": "Description",
       "default": "No gimmicks. Just fabric, fit, and finish that hold up."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop the collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
     },
     {
       "type": "header",

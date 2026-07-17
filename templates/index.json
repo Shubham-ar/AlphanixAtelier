@@ -154,11 +154,11 @@
           "type": "_product-list-content",
           "static": true,
           "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
+            "content_direction": "row",
+            "vertical_on_mobile": false,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "flex-end",
+            "align_baseline": true,
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "center",
             "gap": 12,
@@ -188,9 +188,9 @@
               "name": "t:names.collection_title",
               "settings": {
                 "text": "<h3>Best sellers</h3>",
-                "width": "100%",
+                "width": "fit-content",
                 "max_width": "normal",
-                "alignment": "center",
+                "alignment": "left",
                 "type_preset": "h4",
                 "font": "var(--font-primary--family)",
                 "font_size": "1rem",
@@ -208,10 +208,25 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "product_list_button_view_all": {
+              "type": "_product-list-button",
+              "name": "t:names.product_list_button",
+              "settings": {
+                "label": "View all",
+                "open_in_new_tab": false,
+                "style_class": "button-unstyled",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
             }
           },
           "block_order": [
-            "product_list_text_zR8Cq9"
+            "product_list_text_zR8Cq9",
+            "product_list_button_view_all"
           ]
         },
         "static-product-card": {
@@ -470,6 +485,47 @@
         "padding-block-end": 50
       }
     },
+    "alphanix_fit_tiles_homepage": {
+      "type": "alphanix-fit-tiles",
+      "blocks": {
+        "tile_regular": {
+          "type": "tile",
+          "settings": {
+            "title": "Regular",
+            "collection": "regular"
+          }
+        },
+        "tile_oversized": {
+          "type": "tile",
+          "settings": {
+            "title": "Oversized",
+            "collection": "oversized"
+          }
+        },
+        "tile_heavyweight": {
+          "type": "tile",
+          "settings": {
+            "title": "Heavyweight",
+            "collection": "heavyweight"
+          }
+        }
+      },
+      "block_order": [
+        "tile_regular",
+        "tile_oversized",
+        "tile_heavyweight"
+      ],
+      "name": "Alphanix Fit Tiles",
+      "settings": {
+        "heading": "Shop by fit",
+        "section_width": "page-width",
+        "background_color": "#ffffff",
+        "heading_color": "#000000",
+        "text_color": "#ffffff",
+        "padding-block-start": 48,
+        "padding-block-end": 24
+      }
+    },
     "collection_links_Ut4aMz": {
       "type": "collection-links",
       "blocks": {
@@ -679,6 +735,8 @@
       "settings": {
         "heading": "Built different",
         "description": "No gimmicks. Just fabric, fit, and finish that hold up.",
+        "button_label": "Shop the collection",
+        "button_link": "shopify://collections/best-sellers",
         "section_width": "page-width",
         "background_color": "#ffffff",
         "text_color": "#000000",
@@ -881,6 +939,7 @@
   "order": [
     "scroll_story_product_JitJeb",
     "alphanix_marquee_QcEyC7",
+    "alphanix_fit_tiles_homepage",
     "product_list_UwRqN4",
     "sale_hero_custom",
     "alphanix_why_choose_homepage",

@@ -66,11 +66,21 @@
             --mobile-max-width: {{ block.settings.mobile_content_max_width }}px;
           ">
             {% if block.settings.heading != blank %}
-              <h2 class="step-heading {{ block.settings.heading_size }} mobile-{{ block.settings.mobile_heading_size }}" style="
-                color: {{ block.settings.text_color }};
-                {% if block.settings.heading_uppercase %}text-transform: uppercase;{% endif %}
-                {% if block.settings.enable_text_shadow %}text-shadow: 0 2px 4px rgba(0,0,0,0.5);{% endif %}
-              ">
+              {%- liquid
+                assign heading_size_desktop = block.settings.heading_font_size | default: 96
+                assign heading_size_mobile = block.settings.heading_font_size_mobile | default: 40
+              -%}
+              <h2
+                class="step-heading"
+                style="
+                  color: {{ block.settings.text_color }};
+                  font-size: {{ heading_size_desktop }}px;
+                  --mobile-heading-size: {{ heading_size_mobile }}px;
+                  {% if block.settings.heading_uppercase %}text-transform: uppercase;{% endif %}
+                  {% if block.settings.heading_nowrap %}white-space: nowrap;{% endif %}
+                  {% if block.settings.enable_text_shadow %}text-shadow: 0 2px 4px rgba(0,0,0,0.5);{% endif %}
+                "
+              >
                 {{ block.settings.heading }}
               </h2>
             {% endif %}
@@ -215,8 +225,17 @@
 
   .step-heading {
     margin: 0 0 1rem;
+    font-family: var(--font-h1--family);
+    font-style: var(--font-h1--style);
+    font-weight: var(--font-h1--weight);
     line-height: 1.05;
     letter-spacing: 0.04em;
+  }
+
+  @media screen and (max-width: 749px) {
+    .step-heading {
+      font-size: var(--mobile-heading-size, 2.5rem) !important;
+    }
   }
 
   .step-description {
@@ -549,21 +568,38 @@
           "default": "Oversized Heavyweight Tee"
         },
         {
-          "type": "select",
-          "id": "heading_size",
-          "options": [
-            { "value": "h2", "label": "Small" },
-            { "value": "h1", "label": "Medium" },
-            { "value": "h0", "label": "Large" }
-          ],
-          "default": "h1",
-          "label": "Heading size"
+          "type": "range",
+          "id": "heading_font_size",
+          "min": 40,
+          "max": 160,
+          "step": 4,
+          "unit": "px",
+          "label": "Heading size (desktop)",
+          "default": 96
+        },
+        {
+          "type": "range",
+          "id": "heading_font_size_mobile",
+          "min": 24,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Heading size (mobile)",
+          "default": 40,
+          "info": "Keep brand names on one line — try 36–44px on small phones."
         },
         {
           "type": "checkbox",
           "id": "heading_uppercase",
           "label": "Heading Uppercase",
           "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "heading_nowrap",
+          "label": "Keep heading on one line",
+          "default": true,
+          "info": "Prevents brand names like ALPHANIX from wrapping. Reduce mobile size if it overflows."
         },
         {
           "type": "richtext",
@@ -643,17 +679,6 @@
         {
           "type": "header",
           "content": "Mobile Settings"
-        },
-        {
-          "type": "select",
-          "id": "mobile_heading_size",
-          "options": [
-            { "value": "h2", "label": "Small" },
-            { "value": "h1", "label": "Medium" },
-            { "value": "h0", "label": "Large" }
-          ],
-          "default": "h1",
-          "label": "Mobile heading size"
         },
         {
           "type": "select",

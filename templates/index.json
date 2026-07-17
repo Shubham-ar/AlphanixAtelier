@@ -17,8 +17,10 @@
           "settings": {
             "scroll_duration": 50,
             "heading": "<em>ALPHANIX</em>",
-            "heading_size": "h1",
+            "heading_font_size": 96,
+            "heading_font_size_mobile": 40,
             "heading_uppercase": true,
+            "heading_nowrap": true,
             "description": "<p>Premium heavyweight tees. Designed in Toronto.</p>",
             "description_style": "uppercase",
             "text_color": "#ffffff",
@@ -27,11 +29,10 @@
             "vertical_alignment": "center",
             "text_alignment": "center",
             "content_max_width": 700,
-            "mobile_heading_size": "h1",
             "mobile_horizontal_alignment": "center",
             "mobile_vertical_alignment": "center",
             "mobile_text_alignment": "center",
-            "mobile_content_max_width": 300,
+            "mobile_content_max_width": 340,
             "button_label": "Shop Best Sellers",
             "button_link": "shopify://collections/best-sellers",
             "button_style_secondary": false,
@@ -45,8 +46,10 @@
           "settings": {
             "scroll_duration": 40,
             "heading": "Built to outlast",
-            "heading_size": "h2",
+            "heading_font_size": 72,
+            "heading_font_size_mobile": 36,
             "heading_uppercase": true,
+            "heading_nowrap": false,
             "description": "<p>Heavyweight cotton. True fit. Ethically made.</p>",
             "description_style": "uppercase",
             "text_color": "#ffffff",
@@ -55,11 +58,10 @@
             "vertical_alignment": "center",
             "text_alignment": "center",
             "content_max_width": 650,
-            "mobile_heading_size": "h2",
             "mobile_horizontal_alignment": "center",
             "mobile_vertical_alignment": "center",
             "mobile_text_alignment": "center",
-            "mobile_content_max_width": 300,
+            "mobile_content_max_width": 320,
             "button_label": "Explore the drop",
             "button_link": "shopify://collections/all",
             "button_style_secondary": false,
@@ -646,79 +648,43 @@
     "alphanix_why_choose_homepage": {
       "type": "alphanix-why-choose",
       "blocks": {
-        "block_1": {
-          "type": "feature",
+        "claim_1": {
+          "type": "claim",
           "settings": {
-            "title": "Premium Materials",
-            "description": "Crafted from carefully selected heavyweight fabrics designed to move with you, ensuring peak durability and athletic styling.",
-            "image": "shopify://shop_images/ChatGPT_Image_May_26_2026_04_44_47_PM.png",
-            "open_by_default": true,
-            "icon": "diamond",
-            "custom_svg": "",
-            "link_label": "",
-            "link_url": "",
-            "block_accent_color": "",
-            "icon_color": ""
+            "title": "Heavyweight",
+            "text": "100% ring-spun cotton. Soft hand. Holds its shape."
           }
         },
-        "block_2": {
-          "type": "feature",
+        "claim_2": {
+          "type": "claim",
           "settings": {
-            "title": "Perfect Fit",
-            "description": "Designed with meticulous attention to detail, keeping in mind other popular manufacturers so you don't have to double-guess your size.",
-            "image": "shopify://shop_images/ChatGPT_Image_May_26_2026_03_12_24_PM.png",
-            "open_by_default": false,
-            "icon": "sparkles",
-            "custom_svg": "",
-            "link_label": "",
-            "link_url": "",
-            "block_accent_color": "",
-            "icon_color": ""
+            "title": "Athletic fit",
+            "text": "True to size. Cut to move — no second-guessing."
           }
         },
-        "block_3": {
-          "type": "feature",
+        "claim_3": {
+          "type": "claim",
           "settings": {
-            "title": "Built to Last",
-            "description": "Made with the best 100% heavyweight cotton you can buy. Ethically sourced and engineered to stay breathable, keeping you dry and comfortable all day.",
-            "image": "shopify://shop_images/ChatGPT_Image_May_26_2026_01_48_36_PM.png",
-            "open_by_default": false,
-            "icon": "shield",
-            "custom_svg": "",
-            "link_label": "",
-            "link_url": "",
-            "block_accent_color": "",
-            "icon_color": ""
+            "title": "Built to last",
+            "text": "Ethically sourced. Under 1% returns."
           }
         }
       },
       "block_order": [
-        "block_1",
-        "block_2",
-        "block_3"
+        "claim_1",
+        "claim_2",
+        "claim_3"
       ],
+      "name": "Alphanix Proof",
       "settings": {
-        "eyebrow": "Why Alphanix",
-        "heading_size": "h3",
-        "heading": "Engineered for Excellence",
-        "description_size": "md",
-        "description": "We design high-performance activewear that seamlessly integrates comfort, durability, and bold luxury design.",
-        "center_header": true,
-        "accordion_mode": false,
+        "heading": "Built different",
+        "description": "No gimmicks. Just fabric, fit, and finish that hold up.",
         "section_width": "page-width",
-        "width": "half",
-        "custom_width": 50,
-        "pill_radius": 100,
-        "card_radius": 24,
-        "pill_gap": 16,
-        "icon_size": 20,
-        "image_aspect_ratio": "16 / 9",
-        "image_width_ratio": 40,
-        "background_color": "",
-        "text_color": "",
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "muted_text_color": "#5c5c5c",
         "accent_color": "{{ settings.color_palette.color1 }}",
-        "border_opacity": 15,
-        "card_bg_opacity": 5,
+        "rule_color": "#e3e3e3",
         "padding-block-start": 80,
         "padding-block-end": 80
       }

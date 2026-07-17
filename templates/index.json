@@ -131,9 +131,6 @@
         "item_TizBCb",
         "item_BfP3HV"
       ],
-      "custom_css": [
-        "{padding-top: 20px; padding-bottom: 20px; border-bottom: 1px solid #e3e3e3;}"
-      ],
       "name": "Alphanix Marquee",
       "settings": {
         "speed": 20,
@@ -143,9 +140,9 @@
         "background_color": "#ffffff",
         "text_color": "#000000",
         "accent_color": "{{ settings.color_palette.color1 }}",
-        "border_color": "#FFFFFF",
-        "padding-block-start": 32,
-        "padding-block-end": 32
+        "border_color": "#e3e3e3",
+        "padding-block-start": 16,
+        "padding-block-end": 16
       }
     },
     "product_list_UwRqN4": {
@@ -188,7 +185,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h3>Explore Most popular </h3>",
+                "text": "<h3>Best sellers</h3>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -625,7 +622,7 @@
         "title_text": "Upgrade the wardrobe staples",
         "description_text": "Premium, ethically made heavyweight tees — built for every day, engineered to last.",
         "button_label": "Shop the collection",
-        "button_link": "/collections/all",
+        "button_link": "shopify://collections/all",
         "text_alignment": "left",
         "overlay_opacity": 75,
         "color_badge_bg": "{{ settings.color_palette.color1 }}",
@@ -644,8 +641,7 @@
         "text_2": "<1% returns",
         "icon_3": "recycle",
         "text_3": "Ethically made"
-      },
-      "disabled": true
+      }
     },
     "alphanix_why_choose_homepage": {
       "type": "alphanix-why-choose",
@@ -659,7 +655,7 @@
             "open_by_default": true,
             "icon": "diamond",
             "custom_svg": "",
-            "link_label": "Explore materials",
+            "link_label": "",
             "link_url": "",
             "block_accent_color": "",
             "icon_color": ""
@@ -674,7 +670,7 @@
             "open_by_default": false,
             "icon": "sparkles",
             "custom_svg": "",
-            "link_label": "Explore materials",
+            "link_label": "",
             "link_url": "",
             "block_accent_color": "",
             "icon_color": ""
@@ -689,7 +685,7 @@
             "open_by_default": false,
             "icon": "shield",
             "custom_svg": "",
-            "link_label": "Explore materials",
+            "link_label": "",
             "link_url": "",
             "block_accent_color": "",
             "icon_color": ""
@@ -729,19 +725,24 @@
     },
     "alphanix_lookbook_htChVj": {
       "type": "alphanix-lookbook",
-      "name": "Alphanix Lookbook",
+      "name": "Alphanix Look Stage",
       "settings": {
-        "eyebrow": "Lookbook",
-        "heading": "On the edge.",
-        "background_text": "ALPHANIX - ALPHANIX",
+        "heading": "Worn for the long haul",
+        "description": "Heavyweight cotton. Athletic fit. Designed in Toronto.",
+        "button_label": "Shop the look",
+        "button_link": "shopify://collections/best-sellers",
         "image_1": "shopify://shop_images/ChatGPT_Image_May_21_2026_05_27_05_PM.png",
         "image_2": "shopify://shop_images/ChatGPT_Image_May_21_2026_04_56_23_PM_91511e99-6c00-44cd-bce7-6b6eb5269c0e.png",
         "image_3": "shopify://shop_images/ChatGPT_Image_May_21_2026_05_17_31_PM_03ee58da-873c-4f9b-aa4e-46e14b3174d6.png",
-        "background_color": "#FFFFFF",
-        "text_color": "#000000",
-        "border_color": "rgba(255, 255, 255, 0.1)",
-        "padding-block-start": 100,
-        "padding-block-end": 100
+        "section_width": "page-width",
+        "stage_height": 85,
+        "background_color": "#0a0a0a",
+        "text_color": "#ffffff",
+        "muted_text_color": "#c8c8c8",
+        "button_bg_color": "{{ settings.color_palette.color1 }}",
+        "button_text_color": "#ffffff",
+        "padding-block-start": 0,
+        "padding-block-end": 48
       }
     },
     "section_F9fMc4": {
@@ -915,10 +916,10 @@
     "scroll_story_product_JitJeb",
     "alphanix_marquee_QcEyC7",
     "product_list_UwRqN4",
+    "sale_hero_custom",
     "alphanix_why_choose_homepage",
     "alphanix_lookbook_htChVj",
     "section_F9fMc4",
-    "sale_hero_custom",
     "collection_links_Ut4aMz",
     "featured_product_mTUbKC"
   ]

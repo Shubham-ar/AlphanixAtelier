@@ -19,9 +19,9 @@
   }
 {%- endstyle -%}
 
-<section id="alphanix-marquee-{{ section.id }}" class="alphanix-marquee-section spacing-style" aria-label="Brand announcements" style="{% render 'spacing-style' %}">
+<section id="alphanix-marquee-{{ section.id }}" class="alphanix-marquee-section spacing-style" aria-label="Brand announcements" style="{% render 'spacing-style', settings: section.settings %}">
   <div class="alphanix-marquee__track">
-    {%- for i in (1..4) -%}
+    {%- for i in (1..2) -%}
       {%- for block in section.blocks -%}
         <div class="alphanix-marquee__item" {{ block.shopify_attributes }}>
           <span>{{ block.settings.text }}</span>

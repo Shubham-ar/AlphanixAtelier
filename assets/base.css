@@ -4042,21 +4042,21 @@ product-price .price-item--sale {
 
 /* =============================================================
    ALPHANIX PREMIUM HEADER OVERRIDES
+   Frosted glass on .header-section only when the header is NOT
+   transparent — transparent headers are position:absolute, so the
+   section collapses and Horizon's underlay must paint solid-on-scroll.
    ============================================================= */
-.header-section:has(> #header-component[sticky="always"]),
-.header-section:has(> #header-component[sticky="scroll-up"][data-sticky-state="active"]) {
+.header-section:has(> #header-component[sticky="always"]:not([transparent])),
+.header-section:has(> #header-component[sticky="scroll-up"][data-sticky-state="active"]:not([transparent])) {
   -webkit-backdrop-filter: saturate(140%) blur(16px);
   backdrop-filter: saturate(140%) blur(16px);
   background: color-mix(in oklab, var(--color-background) 80%, transparent);
 }
 
-#header-component[data-sticky-state="active"] .header__underlay-closed,
-#header-component[data-sticky-state="active"] .header__underlay-open {
-  background: transparent !important;
-}
-
-#header-component[data-sticky-state="active"] .header__row {
-  background: transparent !important;
+/* Optional glass on the native underlay once sticky-active (transparent home/PDP) */
+#header-component[transparent][data-sticky-state="active"] .header__underlay-closed {
+  -webkit-backdrop-filter: saturate(140%) blur(16px);
+  backdrop-filter: saturate(140%) blur(16px);
 }
 
 
